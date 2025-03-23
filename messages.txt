@@ -1,0 +1,34 @@
+| WARPS | Teleported to ${location}!
+
+| EMBLEMS | You have activated a ${min} minute ${type} booster!
+
+| RNG | ${player} has activated a ${minutes} minutes ${rarity} RNG Boost!
+| RNG | A ${rarity} RNG Boost has given you an extra ${progress} of RNG meter progress across ${drops} drops in the last minute.
+
+| AUCTION | ${player} listed (${count}x) ${item} on the Auction House for $${price}
+
+| INFO |  ${player} has just purchased ${product}! 
+
+| CHAMBERS | ${player} just looted a Basic Chamber!
+
+| AIRDROP | There is an air drop happening in ${time}!
+
+| ! | Welcome ${player} to TrappedMC! Inmate #${number}
+
+| FISH | Total Fish Length Competition
+| FISH | #${rank} | ${player} - ${length}cm
+
+| INFO | You have found a ${rarity} Mining Pet Egg while mining! Claim it
+
+| TOKENS | You have received ${ammount}✪.
+
+| KEYS | You have received ${item} [${chance}%]!
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,57 @@
+{
+	"minecraft:spawn": [
+		{
+			"name": "NPC's Tax Pool, Token Shop, COsmetics",
+			"boundary": [
+				[53, 61, 16],
+				[63, 67, 32]
+			]
+		},
+		{
+			"name": "NPC's Shard- & Artifact Trader, Vote Crate",
+			"boundary": [
+				[56, 62, -23],
+				[65, 67, -11]
+			]
+		},
+		{
+			"name": "Warp Menu",
+			"boundary": [
+				[26, 63, -24],
+				[40, 75, -13]
+			]
+		},
+		{
+			"name": "Auction",
+			"boundary": [
+				[18, 64, 6],
+				[23, 70, 11]
+			]
+		},
+		{
+			"name": "Profile",
+			"boundary": [
+				[18, 64, -11],
+				[23, 70, -6]
+			]
+		},
+		{
+			"name": "Wither & Titan Crate",
+			"boundary": [
+				[25, 63, 13],
+				[39, 75, 36]
+			]
+		},
+		{
+			"name": "Mine A",
+			"boundary": [
+				[-3, 37, -88],
+				[25, 62, -60]
+			]
+		},
+		{
+			"name": "",
+			"boundary": [[], []]
+		}
+	]
+}
