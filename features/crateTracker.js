@@ -71,17 +71,27 @@ class CrateTracker extends Feature {
 			if (!Player.getContainer()?.getName()?.getString()?.includes(' Crate')) return;
 			this.slots.forEach(({ count, chance }, i) => {
 				const [x, y] = Render.getSlotCenter(i);
-				Renderer.pushMatrix()
-					.translate(x - 8, y - 8, 300)
-					.scale(0.5, 0.5, 1);
-				Renderer.drawString(`§l${count}\n§l${chance}%`, 0, 0, Renderer.LIGHT_PURPLE, true);
-				Renderer.popMatrix();
-
-				// Renderer.drawStringWithShadow(`§e${count} ${chance}%`, x - 8, y - 8);
-				// Render.string(`${count} ${chance}%`, x - 8, y - 8, Renderer.WHITE, true, 300, 0.6);
-				// const item = Player.getContainer().getItems().get(i);
-				// if (!item) return;
-				// Renderer.item(item, x, y, count);
+				const length = count.toString().length + chance.toString().length;
+				Render.string({
+					text: `${count}`,
+					x: x,
+					y: y - 8,
+					scale: 0.5,
+					color: Renderer.GOLD,
+					shadow: true,
+					backgroundColor: Renderer.getColor(0, 0, 0, 100),
+					align: Render.Align.RIGHT,
+				});
+				Render.string({
+					text: `${chance}%`,
+					x: x,
+					y: y + 8,
+					scale: 0.5,
+					color: Renderer.LIGHT_PURPLE,
+					shadow: true,
+					backgroundColor: Renderer.getColor(0, 0, 0, 100),
+					align: Render.Align.RIGHT,
+				});
 			});
 		});
 	}
