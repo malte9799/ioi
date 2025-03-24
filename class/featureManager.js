@@ -90,10 +90,13 @@ class FeatureManager {
 		let featuresDir = new File('./config/ChatTriggers/modules/' + metadata.name + '/features');
 
 		let loadedFeatures = new Map();
-
+		new Thread(() => {
+			this.dataLoader = this.loadFeature('dataLoader').class;
+		}).start();
 		featuresDir.list().forEach((fileName) => {
 			if (!fileName.includes('.js')) return;
 			let feature = fileName.split('.')[0];
+			if (feature == 'dataLoader') return;
 			loadedFeatures.set(feature, false);
 			new Thread(() => {
 				this.loadFeature(feature);
@@ -111,11 +114,12 @@ class FeatureManager {
 			let loadedFeature = require('../features/' + feature + '.js');
 			this.features[feature] = loadedFeature;
 			loadedFeature.class.setId(feature);
-			loadedFeature.class._initVariables(this);
+			// loadedFeature.class._initVariables(this);
 			if (loadedFeature.class.isDefaultEnabled) {
-				loadedFeature.class._onEnable();
+				loadedFeature.class._onEnable(this);
 			}
 			logger.info('■ Loaded feature ' + feature, 3);
+			return loadedFeature;
 		} catch (e) {
 			logger.chat('§cError loading feature ' + feature);
 			logger.error('Error loading feature ' + feature);
