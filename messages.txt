@@ -11,6 +11,8 @@ Hey! Sorry, but you can't use that here.
 
 | WARPS | Teleported to ${location}!
 
+| EVENT | ${player} has started a Wither Crate Event!
+
 | VOTE | ${player} voted on ${site} +1 Voting Shard!
 
 | EMBLEMS | You have activated a ${min} minute ${type} booster!
@@ -39,9 +41,10 @@ Hey! Sorry, but you can't use that here.
 | KEYS | You have received ${item} [${chance}%]!
 
 | CRATES | You just received a crate. Claim it with /claim!
+| CRATES | You just received a Wither Crate.
 
 [Discord]  ${player} » ${msg}
 
 | SELL | You sold ${ammount} items for $${money}!
 
-
+You were kicked from prison: Transaction timeout (for waitingTransactionQueue)
