@@ -15,7 +15,6 @@ export default class Feature {
 	}
 
 	initSettings(Settings) {}
-	initVariables() {}
 	onDisable() {}
 	onEnable() {}
 
@@ -28,7 +27,6 @@ export default class Feature {
 
 	_onDisable() {
 		Object.values(this.events).forEach((e) => {
-			// e.unregister();
 			this.FeatureManager.unregisterEvent(e);
 		});
 
@@ -37,14 +35,12 @@ export default class Feature {
 		this.events = {};
 		this.enabled = false;
 	}
-	_onEnable() {
+	_onEnable(parent) {
+		this.FeatureManager = parent;
+		this.dataLoader = parent.dataLoader;
 		this.enabled = true;
 
 		this.onEnable();
-	}
-	_initVariables(parent) {
-		this.FeatureManager = parent;
-		this.initVariables();
 	}
 
 	registerChat(criteria, func) {
@@ -90,22 +86,6 @@ export default class Feature {
 		this.events[event.id] = event;
 		return event;
 	}
-	// registerGuiOpened(func) {
-	//     let event = this.FeatureManager.registerEvent('guiOpened', func, this);
-	//     this.events[event.id] = event;
-	// }
-	// registerGuiClosed(func) {
-	//     let event = this.FeatureManager.registerEvent('guiClosed', func, this);
-	//     this.events[event.id] = event;
-	// }
-	// registerGuiRender(func) {
-	//     let event = this.FeatureManager.registerEvent('guiRender', func, this);
-	//     this.events[event.id] = event;
-	// }
-	// registerPostGuiRender(func) {
-	//     let event = this.FeatureManager.registerEvent('postGuiRender', func, this);
-	//     this.events[event.id] = event;
-	// }
 
 	registerEvent(type, func) {
 		let event = this.FeatureManager.registerEvent(type, func, this);
