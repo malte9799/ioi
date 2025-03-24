@@ -7,25 +7,7 @@ class SuperBreaker extends Feature {
 	constructor() {
 		super();
 		this.isDefaultEnabled = true;
-	}
 
-	initSettings(Settings) {
-		this.Settings = Settings;
-		Settings.addProperty('SWITCH', {
-			name: 'Cooldown Display',
-			descrption: 'Displayes an cooldown (like on enderpearls) on all pickaxes while SuperBreaker is charging.',
-			category: 'Mining',
-			subcategory: '',
-		});
-		Settings.addProperty('SWITCH', {
-			name: "'worn off' Sound",
-			descrption: 'Plays a sound when Super Breaker wears off.',
-			category: 'Mining',
-			subcategory: '',
-		});
-	}
-
-	initVariables() {
 		this.baseCooldown = 240;
 		this.cooldownT = 0;
 		this.baseLength = 22;
@@ -50,13 +32,29 @@ class SuperBreaker extends Feature {
 				return false;
 			}
 		};
+	}
 
-		this.alert = this.registerStep(true, 2, () => {
-			new Sound({ source: 'block.note_block.pling', category: Sound.Category.MASTER, pitch: 1.5, volume: 1 }).play();
-		}).unregister();
+	initSettings(Settings) {
+		this.Settings = Settings;
+		Settings.addProperty('SWITCH', {
+			name: 'Cooldown Display',
+			descrption: 'Displayes an cooldown (like on enderpearls) on all pickaxes while SuperBreaker is charging.',
+			category: 'Mining',
+			subcategory: '',
+		});
+		Settings.addProperty('SWITCH', {
+			name: "'worn off' Sound",
+			descrption: 'Plays a sound when Super Breaker wears off.',
+			category: 'Mining',
+			subcategory: '',
+		});
 	}
 
 	onEnable() {
+		this.alert = this.registerStep(true, 2, () => {
+			new Sound({ source: 'block.note_block.pling', category: Sound.Category.MASTER, pitch: 1.5, volume: 1 }).play();
+		}).unregister();
+
 		this.registerChat('You ready your pickaxe.', () => {
 			this.alert.unregister();
 		});
