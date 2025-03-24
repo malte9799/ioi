@@ -2,7 +2,7 @@
 /// <reference lib="es2015" />
 import Feature from '../class/feature';
 import logger from '../logger';
-import RenderLib from '../utils/renderLib';
+import Render from '../utils/renderLib';
 
 const ITEM = new Item(new ItemType('minecraft:dirt'));
 
@@ -30,7 +30,7 @@ class Base extends Feature {
 			if (itemName == 'minecraft:iron_bars') return;
 			const vault = ChatLib.removeFormatting(slot.item.getName()).split(' ')[1];
 			if (!this.vaultItems[vault]) {
-				RenderLib.drawCenterString('Not Cached', Renderer.screen.getWidth() / 2, 100, Renderer.YELLOW);
+				Render.centerString('Not Cached', Renderer.screen.getWidth() / 2, 100, Renderer.YELLOW);
 			} else {
 				// TODO: Render Vault Items
 			}
