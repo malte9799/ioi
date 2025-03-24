@@ -23,13 +23,15 @@ class Eval extends Feature {
 			} catch (e) {
 				result = e;
 			} finally {
-				new TextComponent({
-					text: result?.toString(),
-					hoverEvent: { action: 'show_text', value: '§cClick to delete' },
-					clickEvent: { action: 'run_command', value: `/deleteid ${id}` },
-				})
-					.withChatLineId(id)
-					.chat();
+				try {
+					new TextComponent({
+						text: result?.toString(),
+						hoverEvent: { action: 'show_text', value: '§cClick to delete' },
+						clickEvent: { action: 'run_command', value: `/deleteid ${id}` },
+					})
+						.withChatLineId(id)
+						.chat();
+				} catch (e) {}
 				console.log(result);
 			}
 		});
