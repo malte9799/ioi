@@ -57,8 +57,10 @@ class SuperBreaker extends Feature {
 	}
 
 	onEnable() {
-		this.registerChat('**SUPER BREAKER ACTIVATED**', () => {
+		this.registerChat('You ready your pickaxe.', () => {
 			this.alert.unregister();
+		});
+		this.registerChat('**SUPER BREAKER ACTIVATED**', () => {
 			this.cooldownT = Date.now();
 			this.setCooldown(this.baseLength);
 		});
