@@ -109,9 +109,16 @@ const mapping = [
 
 const packetIgnore = [];
 
+global.sounds = new Set();
+register('soundPlay', (pos, name, volume, pitch, cat, event) => {
+	global.sounds.add(name);
+});
+// | EVENT | You just looted a Wooden Crate!
+
 // register('PacketReceived', (packet, event) => {
 // 	if (packetIgnore.includes(packet.class.getSimpleName())) return;
-//  ChatLib.chat('§c!!!! ' + packet + ' ' + packet.toString());
+//  console.log(packet.toString());
+// 	ChatLib.chat(packet.toString());
 // });
 
 // register('packetSent', (packet, event) => {
