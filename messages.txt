@@ -1,4 +1,17 @@
+| ! | Welcome ${player} to TrappedMC! Inmate #${number}
+| ! | player ${player} was kicked because of cheating!
+| ! | You must be at least rank [${prestige}] and Herbalism ${herb} in order to farm ${crop}!
+
+Hey! Sorry, but you can't PvP here.
+Hey! Sorry, but you can't break that block here.
+Hey! Sorry, but you can't open that here.
+Hey! Sorry, but you can't use that here.
+
+| MCMMO | ${skill} increased to ${level}.
+
 | WARPS | Teleported to ${location}!
+
+| VOTE | ${player} voted on ${site} +1 Voting Shard!
 
 | EMBLEMS | You have activated a ${min} minute ${type} booster!
 
@@ -9,26 +22,26 @@
 
 | INFO |  ${player} has just purchased ${product}! 
 
-| CHAMBERS | ${player} just looted a Basic Chamber!
+| CHAMBERS | ${player} just looted a ${name} Chamber!
 
 | AIRDROP | There is an air drop happening in ${time}!
 
-| ! | Welcome ${player} to TrappedMC! Inmate #${number}
-
+| FISH | You caught a ${length}cm ${rarity} ${fish}!
 | FISH | Total Fish Length Competition
+
 | FISH | #${rank} | ${player} - ${length}cm
 
 | INFO | You have found a ${rarity} Mining Pet Egg while mining! Claim it
+| INFO | Converted all items into blocks.
 
 | TOKENS | You have received ${ammount}✪.
 
 | KEYS | You have received ${item} [${chance}%]!
 
+| CRATES | You just received a crate. Claim it with /claim!
 
+[Discord]  ${player} » ${msg}
 
-
-
-
-
+| SELL | You sold ${ammount} items for $${money}!
 
 

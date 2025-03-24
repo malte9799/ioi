@@ -2,16 +2,10 @@
 /// <reference lib="es2015" />
 import Feature from '../class/feature';
 import logger from '../logger';
-import RenderLib from '../utils/renderLib';
+import Render from '../utils/renderLib';
 import renderBeaconBeam from '../utils/beaconBeam';
 
-// const BakedModelManager = net.minecraft.client.render.model.BakedModelManager
-// const Identifier = net.minecraft.util.Identifier
-// const ItemRenderer = net.minecraft.client.render.item.ItemRenderer
-// const ModelTransformationMode = net.minecraft.item.ModelTransformationMode
-// const vcp = Client.getMinecraft().getBufferBuilders().getEntityVertexConsumers()
-
-// const ITEM = new Item(new ItemType('minecraft:dirt')).toMC();
+const ITEM = new Item(new ItemType('minecraft:grass_block'));
 
 class Debug extends Feature {
 	constructor() {
@@ -36,14 +30,14 @@ class Debug extends Feature {
 		// 	// logger.chat(`BlockUpdate: ${block}`);
 		// });
 		// this.registerEvent('preRenderWorld', () => {
-		// 	// RenderLib.drawBlockFilled(new BlockPos(0, 70, 0),Renderer.WHITE)
+		// 	// Render.drawBlockFilled(new BlockPos(0, 70, 0),Renderer.WHITE)
 		// 	// renderBeaconBeam(2058, 60, 62, Renderer.RED, 300, false);
 		// 	// renderBeaconBeam(2058, 60, 65);
 		// });
-		// this.registerEvent('postGuiRender', () => {
-		// 	// renderItem(ItemStack stack, ModelTransformationMode transformationMode, int light, int overlay, MatrixStack matrices, VertexConsumerProvider vertexConsumers, @Nullable World world, int seed)
-		// 	// ItemRenderer.renderItem(ITEM, ModelTransformationMode.GUI, 15, 0, Renderer.matrixStack.toMC(), vcp, World.getWorld(), 0)
-		// });
+		this.registerEvent('postGuiRender', () => {
+			// const [x, y] = Render.getSlotCenter(0);
+			// Render.item(ITEM, x - 16, y);
+		});
 	}
 
 	onDisable() {}
