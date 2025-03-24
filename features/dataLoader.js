@@ -3,7 +3,7 @@
 import Feature from '../class/feature';
 import logger from '../logger';
 
-class AreaTracker extends Feature {
+class DataLoader extends Feature {
 	constructor() {
 		super();
 
@@ -12,19 +12,26 @@ class AreaTracker extends Feature {
 		this.isTogglable = false;
 
 		this.locations = {};
+
+		this.location = undefined;
 	}
 
 	initSettings(Settings) {}
 
 	onEnable() {
 		this.registerChat('| WARPS | Teleported to ${loc}!', (loc, event) => {
+			this.location = loc;
 			if (loc.length == 1) {
 			}
 		});
 	}
 
+	static getLocation() {
+		return this.location;
+	}
+
 	onDisable() {}
 }
 module.exports = {
-	class: new AreaTracker(),
+	class: new DataLoader(),
 };
