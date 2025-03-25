@@ -109,9 +109,9 @@ const mapping = [
 
 const packetIgnore = [];
 
-global.sounds = new Set();
+global.sounds = new Map();
 register('soundPlay', (pos, name, volume, pitch, cat, event) => {
-	global.sounds.add(name);
+	global.sounds.set(name, { volume, pitch });
 });
 // | EVENT | You just looted a Wooden Crate!
 
