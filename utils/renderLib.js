@@ -16,6 +16,18 @@ export default class Render {
 	static BOTTOM = 'BOTTOM_CENTER';
 	static BOTTOM_RIGHT = 'BOTTOM_RIGHT';
 
+	static HexToRgb(hex) {
+		console.log(hex);
+		const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex.toLowerCase());
+		return result
+			? {
+					r: parseInt(result[1], 16),
+					g: parseInt(result[2], 16),
+					b: parseInt(result[3], 16),
+			  }
+			: null;
+	}
+
 	static getPositionMatrix() {
 		return Renderer.matrixStack.toMC().peek().positionMatrix;
 	}
