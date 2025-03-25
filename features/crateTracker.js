@@ -28,8 +28,9 @@ class CrateTracker extends Feature {
 
 		this.registerEvent('playerInteract', (action, pos, event) => {
 			if (action.toString() !== 'UseBlock') return;
-			if (Player.getHeldItem()?.getType()?.getRegistryName() != 'minecraft:tripwire_hook') return;
-			this.lastKey = ChatLib.removeFormatting(Player.getHeldItem().getName().split(' ')[0]);
+			const keyList = new Set('minecraft:tripwire_hook', 'minecraft:trial_key', 'minecraft:ominous_trial_key');
+			if (!keyList.has(Player.getHeldItem()?.getType()?.getRegistryName())) return;
+			if (Player.getHeldItem().getName().includes('Key')) this.lastKey = ChatLib.removeFormatting(Player.getHeldItem().getName().split(' ')[0]);
 		});
 
 		this.registerEvent('guiOpened', () => {
