@@ -15,6 +15,7 @@ export default ColorCode = {
 	LIGHT_PURPLE: '§d',
 	YELLOW: '§e',
 	WHITE: '§f',
+
 	OBFUSCATED: '§k',
 	BOLD: '§l',
 	STRIKETHROUGH: '§m',
