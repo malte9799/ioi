@@ -4,7 +4,7 @@
 if (!global.trapped) global.trapped = {};
 class TrappedQOL {
 	constructor() {
-		this.FeatureManager = require('./class/featureManager.js');
+		this.FeatureManager = require('./class/FeatureManager.js');
 		this.FeatureManager.parent = this;
 	}
 }
@@ -109,10 +109,12 @@ const mapping = [
 
 const packetIgnore = [];
 
+const soundIgnore = new Set(['minecraft:ui.toast.in', 'minecraft:ui.loom.select_pattern', 'minecraft:block.stone.step', 'minecraft:entity.player.levelup', 'minecraft:block.stone.hit', 'minecraft:block.stone.break', 'minecraft:entity.experience_orb.pickup', 'minecraft:entity.item.pickup', 'minecraft:block.netherrack.break', 'minecraft:ui.button.click', 'minecraft:block.note_block.pling', 'minecraft:item.armor.equip_gold', 'minecraft:item.trident.riptide_3', 'minecraft:block.conduit.deactivate', 'minecraft:block.glass.step', 'minecraft:block.netherrack.step', 'minecraft:block.glass.hit', 'minecraft:block.netherrack.hit', 'minecraft:music.game', 'minecraft:block.wood.step', 'minecraft:block.wool.step']);
 global.sounds = new Map();
-register('soundPlay', (pos, name, volume, pitch, cat, event) => {
-	global.sounds.set(name, { volume, pitch });
-});
+// register('soundPlay', (pos, name, volume, pitch, cat, event) => {
+// 	if (soundIgnore.has(name)) return;
+// 	global.sounds.set(name, { volume, pitch });
+// });
 // | EVENT | You just looted a Wooden Crate!
 
 // register('PacketReceived', (packet, event) => {

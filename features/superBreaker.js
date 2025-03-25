@@ -1,6 +1,6 @@
 /// <reference types="../../CTAutocomplete" />
 /// <reference lib="es2015" />
-import Feature from '../class/feature';
+import Feature from '../class/Feature';
 import logger from '../logger';
 
 class SuperBreaker extends Feature {

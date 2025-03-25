@@ -1,5 +1,5 @@
-import logger from '../logger';
-import NonPooledThread from '../utils/nonPooledThread';
+import logger from '../logger.js';
+import NonPooledThread from '../utils/nonPooledThread.js';
 const File = Java.type('java.io.File');
 import metadata from '../metadata.js';
 import db from '../db.js';
@@ -18,7 +18,7 @@ class FeatureManager {
 
 		// this.Settings = settings;
 
-		this.longEventTime = 20;
+		this.longEventTime = 10;
 
 		new NonPooledThread(() => {
 			this.loadMain();
@@ -76,6 +76,7 @@ class FeatureManager {
 	}
 
 	loadMain() {
+		this.enabled = true;
 		let startLoading = Date.now();
 		db.save();
 		this.loadAllFeatures();
@@ -156,13 +157,15 @@ class FeatureManager {
 							logger.warn('Long event triggered [' + time + 'ms] (' + context.getId() + '/' + type + ')', 3);
 						}
 					} else {
-						let feature = context.getId();
-						new TextComponent(this.messagePrefix + 'Feature not enabled! ', {
-							text: '[enable]',
-							color: 'yellow',
-							hoverEvent: { action: 'show_text', value: '§aClick to enable "' + feature + '"' },
-							clickEvent: { action: 'run_command', value: `/soopyloadfeature ${feature}` },
-						}).chat();
+						if (this.enabled) {
+							let feature = context.getId();
+							new TextComponent(this.messagePrefix + 'Feature not enabled! ', {
+								text: '[enable]',
+								color: 'yellow',
+								hoverEvent: { action: 'show_text', value: '§aClick to enable "' + feature + '"' },
+								clickEvent: { action: 'run_command', value: `/soopyloadfeature ${feature}` },
+							}).chat();
+						}
 					}
 				} catch (e) {
 					logger.error(`Error in ${type} event:`);
@@ -180,6 +183,9 @@ class FeatureManager {
 			unregister: () => {
 				this.events[id].trigger.unregister();
 				return this.events[id];
+			},
+			isRegistered: () => {
+				return this.events[id].trigger.isRegistered();
 			},
 		};
 

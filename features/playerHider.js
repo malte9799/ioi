@@ -1,6 +1,6 @@
 /// <reference types="../../CTAutocomplete" />
 /// <reference lib="es2015" />
-import Feature from '../class/feature';
+import Feature from '../class/Feature';
 import logger from '../logger';
 
 const PlayerEntity = Java.type('net.minecraft.entity.player.PlayerEntity');
@@ -9,7 +9,7 @@ class PlayerHider extends Feature {
 	constructor() {
 		super();
 
-		this.isDefaultEnabled = false;
+		this.isDefaultEnabled = true;
 
 		this.npcs = new Set();
 	}

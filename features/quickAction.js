@@ -1,6 +1,6 @@
 /// <reference types="../../CTAutocomplete" />
 /// <reference lib="es2015" />
-import Feature from '../class/feature';
+import Feature from '../class/Feature';
 import logger from '../logger';
 
 const quickActionKey = new KeyBind('Quick Action', Keyboard.KEY_R, 'TrappedMC');
