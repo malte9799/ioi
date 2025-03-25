@@ -9,7 +9,7 @@ class PlayerHider extends Feature {
 	constructor() {
 		super();
 
-		this.isDefaultEnabled = true;
+		this.isDefaultEnabled = false;
 
 		this.npcs = new Set();
 	}
