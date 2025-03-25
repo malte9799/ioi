@@ -3,11 +3,9 @@
 import Feature from '../class/Feature';
 import logger from '../logger';
 import Render from '../utils/renderLib';
+import PogObject from 'PogData';
 
-import db from '../db';
-
-const ITEM = new Item(new ItemType('minecraft:orange_stained_glass_pane'));
-
+const DB = new PogObject('trapped', {}, 'data/crates.data.json').autosave();
 class CrateTracker extends Feature {
 	constructor() {
 		super();
@@ -16,8 +14,6 @@ class CrateTracker extends Feature {
 
 		this.lastKey = undefined;
 
-		if (!db.CrateTracker) db.CrateTracker = {};
-
 		this.slots = new Map();
 	}
 
@@ -25,9 +21,9 @@ class CrateTracker extends Feature {
 
 	onEnable() {
 		this.registerChat('| KEYS | You have received ${item} [${cahnce}%]!', (item, chance, event) => {
-			if (!db.CrateTracker[this.lastKey]) db.CrateTracker[this.lastKey] = {};
+			if (!DB[this.lastKey]) DB[this.lastKey] = {};
 			const itemName = `${item} [${chance}%]`;
-			db.CrateTracker[this.lastKey][itemName] = (db.CrateTracker[this.lastKey][itemName] || 0) + 1;
+			DB[this.lastKey][itemName] = (DB[this.lastKey][itemName] || 0) + 1;
 		});
 
 		this.registerEvent('playerInteract', (action, pos, event) => {
@@ -40,7 +36,7 @@ class CrateTracker extends Feature {
 			Client.scheduleTask(2, () => {
 				if (!Player.getContainer()?.getName()?.getString()?.includes(' Crate')) return;
 				const type = Player.getContainer().getName().getString().slice(0, -6);
-				if (!db.CrateTracker[type]) return;
+				if (!DB[type]) return;
 				Player.getContainer()
 					.getItems()
 					.slice(0, -36)
@@ -48,9 +44,9 @@ class CrateTracker extends Feature {
 						if (!item) return;
 						const itemName = ChatLib.removeFormatting(item.getName());
 						if (!itemName.includes('%')) return;
-						const count = db.CrateTracker[type][itemName] || 0;
+						const count = DB[type][itemName] || 0;
 						if (count == 0) return;
-						const total = Object.values(db.CrateTracker[type]).reduce((a, b) => a + b, 0);
+						const total = Object.values(DB[type]).reduce((a, b) => a + b, 0);
 						const chance = Math.round((count / total) * 100);
 						this.slots.set(i, { count, chance });
 					});
@@ -93,7 +89,9 @@ class CrateTracker extends Feature {
 		});
 	}
 
-	onDisable() {}
+	onDisable() {
+		DB.save();
+	}
 }
 module.exports = {
 	class: new CrateTracker(),

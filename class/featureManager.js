@@ -2,7 +2,6 @@ import logger from '../logger.js';
 import NonPooledThread from '../utils/nonPooledThread.js';
 const File = Java.type('java.io.File');
 import metadata from '../metadata.js';
-import db from '../db.js';
 // import settings from '../settings.js';
 
 class FeatureManager {
@@ -78,7 +77,6 @@ class FeatureManager {
 	loadMain() {
 		this.enabled = true;
 		let startLoading = Date.now();
-		db.save();
 		this.loadAllFeatures();
 		logger.chat('Loaded!');
 		logger.info('TrappedQOL took ' + ((Date.now() - startLoading) / 1000).toFixed(2) + 's to load');
