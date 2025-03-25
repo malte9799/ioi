@@ -1,18 +1,25 @@
-const UMatrixStack = Java.type('gg.essential.universal.UMatrixStack');
-
 const ModelTransformationMode = net.minecraft.item.ModelTransformationMode;
-const vcp = Client.getMinecraft().getBufferBuilders().getEntityVertexConsumers();
+const VertexConsumers = Client.getMinecraft().getBufferBuilders().getEntityVertexConsumers();
 
 const TextRenderer = Renderer.getFontRenderer();
 const TextLayerType = net.minecraft.client.font.TextRenderer.class_6415;
 const NEWLINE_REGEX = /\n|\r\n?/;
 
 export default class Render {
-	static Align = {
-		LEFT: 'LEFT',
-		CENTER: 'CENTER',
-		RIGHT: 'RIGHT',
-	};
+	static TOP_LEFT = 'TOP_LEFT';
+	static TOP = 'TOP_CENTER';
+	static TOP_RIGHT = 'TOP_RIGHT';
+	static LEFT = 'CENTER_LEFT';
+	static CENTER = 'CENTER_CENTER';
+	static RIGHT = 'CENTER_RIGHT';
+	static BOTTOM_LEFT = 'BOTTOM_LEFT';
+	static BOTTOM = 'BOTTOM_CENTER';
+	static BOTTOM_RIGHT = 'BOTTOM_RIGHT';
+
+	static getPositionMatrix() {
+		return Renderer.matrixStack.toMC().peek().positionMatrix;
+	}
+
 	/**
 	 * Returns the x and y coordinates of the center of a slot. Code originally from Antonio.
 	 * @param {Number} slot - The slot number to be calculated
@@ -28,40 +35,63 @@ export default class Render {
 		return [renderX, renderY];
 	}
 
-	static centerString(text, x = 0, y = 0, color = Renderer.WHITE, shadow = false, z = 300, scale = 1) {
-		this.string({ text, x: x - Renderer.getStringWidth(text) / 2, y, z, scale, color, shadow });
-	}
-	static string({ text, x = 0, y = 0, z = 300, scale = 1, color = Renderer.WHITE, shadow = false, backgroundColor = Renderer.getColor(0, 0, 0, 0), light = 15, align = 'LEFT' }) {
+	static string({ text, x = 0, y = 0, z = 300, scale = 1, color = Renderer.WHITE, shadow = false, backgroundColor = Renderer.getColor(0, 0, 0, 0), light = 15, align = Render.CENTER }) {
 		const TextRenderer = Renderer.getFontRenderer();
-		if (align == Render.Align.CENTER) x -= Renderer.getStringWidth(text) / 2;
-		else if (align == Render.Align.RIGHT) x -= Renderer.getStringWidth(text);
 		let yOffset = 0;
+		align = align.split('_');
+		if (align[0] == 'CENTER') y -= (TextRenderer.fontHeight / 2) * scale;
+		if (align[0] == 'BOTTOM') y -= TextRenderer.fontHeight * scale;
+		if (align[1] == 'CENTER') x -= (Renderer.getStringWidth(text) / 2) * scale;
+		if (align[1] == 'RIGHT') x -= Renderer.getStringWidth(text) * scale;
 
 		Renderer.pushMatrix().translate(x, y, z).scale(scale, scale, 1);
 		ChatLib.addColor(text)
 			.split(NEWLINE_REGEX)
 			.forEach((line, i) => {
-				TextRenderer.draw(line, 0, yOffset, color, shadow, Renderer.matrixStack.toMC().peek().positionMatrix, vcp, TextLayerType.NORMAL, backgroundColor, light);
+				TextRenderer.draw(line, 0, yOffset, color, shadow, Render.getPositionMatrix(), VertexConsumers, TextLayerType.NORMAL, backgroundColor, light);
 				yOffset += TextRenderer.fontHeight;
 			});
 		Renderer.popMatrix();
+		return Render;
 	}
-	// static string(text, x, y, z = 300, scale = 1, color = Renderer.WHITE, shadow = false, backgroundColor = Renderer.BLACK, light = 15) {
-	// 	this.string({ text, x, y, z, scale, color, shadow, backgroundColor, light });
-	// }
 
-	static item(item, x = 0, y = 0, scale = 1, z = 300) {
+	static rect({ x = 0, y = 0, z = 300, width = 1, height = 1, scale = 1, color = Renderer.WHITE, align = Render.CENTER }) {
+		align = align.split('_');
+		if (align[0] == 'CENTER') y -= (height / 2) * scale;
+		if (align[0] == 'BOTTOM') y -= height * scale;
+		if (align[1] == 'CENTER') x -= (width / 2) * scale;
+		if (align[1] == 'RIGHT') x -= width * scale;
+
+		Renderer.pushMatrix()
+			.translate(x, y, z)
+			.scale((width / 8) * scale, (height / 8) * scale, 1);
+
+		TextRenderer.draw('█', 0, 0, color, false, Render.getPositionMatrix(), VertexConsumers, TextLayerType.NORMAL, 0, 0);
+
+		Renderer.popMatrix();
+		return Render;
+	}
+
+	static item({ item, x = 0, y = 0, z = 300, scale = 1, align = Render.CENTER }) {
+		align = align.split('_');
+		if (align[0] == 'TOP') y += 8 * scale;
+		if (align[0] == 'BOTTOM') y -= 8 * scale;
+		if (align[1] == 'LEFT') x += 8 * scale;
+		if (align[1] == 'RIGHT') x -= 8 * scale;
+
 		const ItemRenderer = Client.getMinecraft().getItemRenderer();
 
 		Renderer.pushMatrix()
-			.scale(scale, scale, 1)
-			.translate(x / scale, y / scale, z)
-			.scale(16.0, -16.0, 1)
-			.colorize(255, 255, 255);
+			.translate(x, y, z)
+			.scale(scale * 16, -scale * 16, 1);
 
-		ItemRenderer.renderItem(item.toMC(), ModelTransformationMode.GUI, 15, 0, Renderer.matrixStack.toMC(), vcp, World.getWorld(), 0);
-		// ItemRenderer.renderItem(undefined, item.toMC(), ModelTransformationMode.GUI, false, Renderer.matrixStack.toMC(), vcp, World.getWorld(), 15, 0, 0);
+		ItemRenderer.renderItem(item.toMC(), ModelTransformationMode.GUI, 15, 0, Renderer.matrixStack.toMC(), VertexConsumers, World.getWorld(), 0);
 		Renderer.popMatrix();
+		const stackSize = item.getStackSize() || 1;
+		if (stackSize > 1) {
+			Render.string({ text: stackSize.toString(), x: x + 9, y: y + 5.5, z: 400, align: Render.RIGHT, shadow: true });
+		}
+		return Render;
 	}
 }
 
