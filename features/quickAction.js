@@ -53,13 +53,20 @@ class QuickAction extends Feature {
 			switch (name) {
 				case 'Crafting': {
 					if (!item.type.getRegistryName().includes('_block')) return;
-					inv.click(index + invSize - 1);
-					inv.click(1);
-					inv.click(0, true);
+					new Thread(() => {
+						inv.click(index + invSize - 1);
+						Thread.sleep(50);
+						inv.click(1);
+						Thread.sleep(50);
+						inv.click(0, true);
+					}).start();
 				}
 				case 'Repair & Disenchant': {
-					inv.click(index + invSize, true);
-					inv.click(2, true);
+					new Thread(() => {
+						inv.click(index + invSize, true);
+						Thread.sleep(50);
+						inv.click(2, true);
+					}).start();
 				}
 			}
 		});
