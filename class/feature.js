@@ -43,33 +43,24 @@ export default class Feature {
 		this.onEnable();
 	}
 
-	registerChat(criteria, func) {
-		let event = this.FeatureManager.registerEvent('chat', func, this);
-		event.trigger.setChatCriteria(criteria);
-		this.events[event.id] = event;
-		return event;
-	}
-	registerSoundPlay(criteria, func) {
-		let event = this.FeatureManager.registerEvent('soundPlay', func, this);
-		event.trigger.setCriteria(criteria);
-		this.events[event.id] = event;
-		return event;
-	}
-	registerActionBar(criteria, func) {
+	registerActionBar(criteria, func, triggerIfCanceled = null) {
 		let event = this.FeatureManager.registerEvent('actionBar', func, this);
 		event.trigger.setChatCriteria(criteria);
+		if (triggerIfCanceled) event.trigger.setPriority(triggerIfCanceled);
 		this.events[event.id] = event;
 		return event;
 	}
-	registerStep(isFps, interval, func) {
-		let event = this.FeatureManager.registerEvent('step', func, this);
-		isFps ? event.trigger.setFps(interval) : event.trigger.setDelay(interval);
+	registerChat(criteria, func, triggerIfCanceled = null) {
+		let event = this.FeatureManager.registerEvent('chat', func, this);
+		event.trigger.setChatCriteria(criteria);
+		if (triggerIfCanceled) event.trigger.setPriority(triggerIfCanceled);
 		this.events[event.id] = event;
 		return event;
 	}
-	registerPacketSent(packetClass, func) {
-		let event = this.FeatureManager.registerEvent('packetSent', func, this);
-		event.trigger.setFilteredClasses(Array.isArray(packetClass) ? packetClass : [packetClass]);
+	registerCommand(name, func, completions) {
+		let event = this.FeatureManager.registerEvent('command', func, this);
+		if (completions) event.trigger.setTabCompletions(completions);
+		event.trigger.setName(name, true);
 		this.events[event.id] = event;
 		return event;
 	}
@@ -79,10 +70,33 @@ export default class Feature {
 		this.events[event.id] = event;
 		return event;
 	}
-	registerCommand(name, func, completions) {
-		let event = this.FeatureManager.registerEvent('command', func, this);
-		if (completions) event.trigger.setTabCompletions(completions);
-		event.trigger.setName(name, true);
+	registerPacketSent(packetClass, func) {
+		let event = this.FeatureManager.registerEvent('packetSent', func, this);
+		event.trigger.setFilteredClasses(Array.isArray(packetClass) ? packetClass : [packetClass]);
+		this.events[event.id] = event;
+		return event;
+	}
+	registerRenderBlockEntity(filterClasses, func) {
+		let event = this.FeatureManager.registerEvent('renderBlockEntity', func, this);
+		event.trigger.setFilteredClasses(Array.isArray(filterClasses) ? filterClasses : [filterClasses]);
+		this.events[event.id] = event;
+		return event;
+	}
+	registerRenderEntity(filterClasses, func) {
+		let event = this.FeatureManager.registerEvent('renderEntity', func, this);
+		event.trigger.setFilteredClasses(Array.isArray(filterClasses) ? filterClasses : [filterClasses]);
+		this.events[event.id] = event;
+		return event;
+	}
+	registerSoundPlay(criteria, func) {
+		let event = this.FeatureManager.registerEvent('soundPlay', func, this);
+		event.trigger.setCriteria(criteria);
+		this.events[event.id] = event;
+		return event;
+	}
+	registerStep(isFps, interval, func) {
+		let event = this.FeatureManager.registerEvent('step', func, this);
+		isFps ? event.trigger.setFps(interval) : event.trigger.setDelay(interval);
 		this.events[event.id] = event;
 		return event;
 	}
