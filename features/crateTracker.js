@@ -4,12 +4,14 @@ import Feature from '../class/Feature';
 import logger from '../logger';
 import Render from '../utils/Render';
 import PogObject from 'PogData';
+// import DB from '../db';
 
-const DB = new PogObject('trapped', {}, 'data/crates.data.json').autosave();
 class CrateTracker extends Feature {
 	constructor() {
 		super();
 
+		DB = new PogObject('trapped', {}, 'data/crates.data.json');
+		DB.autosave();
 		this.isDefaultEnabled = true;
 
 		this.lastKey = undefined;
