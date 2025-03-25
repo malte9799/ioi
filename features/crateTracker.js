@@ -2,7 +2,7 @@
 /// <reference lib="es2015" />
 import Feature from '../class/Feature';
 import logger from '../logger';
-import Render from '../utils/renderLib';
+import Render from '../utils/Render';
 import PogObject from 'PogData';
 
 const DB = new PogObject('trapped', {}, 'data/crates.data.json').autosave();

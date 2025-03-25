@@ -17,7 +17,6 @@ export default class Render {
 	static BOTTOM_RIGHT = 'BOTTOM_RIGHT';
 
 	static HexToRgb(hex) {
-		console.log(hex);
 		const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex.toLowerCase());
 		return result
 			? {
@@ -25,7 +24,7 @@ export default class Render {
 					g: parseInt(result[2], 16),
 					b: parseInt(result[3], 16),
 			  }
-			: null;
+			: console.log('Invalid Hex Color: ' + hex);
 	}
 
 	static getPositionMatrix() {

@@ -2,7 +2,7 @@
 /// <reference lib="es2015" />
 import Feature from '../class/Feature';
 import logger from '../logger';
-import Render from '../utils/renderLib';
+import Render from '../utils/Render';
 
 const HOE = new Item(new ItemType('minecraft:sponge'));
 const SHOVEL = new Item(new ItemType('minecraft:soul_sand'));

@@ -2,7 +2,7 @@
 /// <reference lib="es2015" />
 import Feature from '../class/Feature';
 import logger from '../logger';
-import ColorCode from '../utils/colorCode';
+import ColorCode from '../utils/ColorCode';
 
 class Emblems extends Feature {
 	constructor() {

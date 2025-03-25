@@ -2,11 +2,10 @@
 /// <reference lib="es2015" />
 import Feature from '../class/Feature';
 import logger from '../logger';
-import Util from '../utils/util';
-import ColorCode from '../utils/colorCode';
-import Render from '../utils/renderLib';
-import WorldLib from '../utils/worldLib';
-import TextLib from '../utils/textLib';
+import ColorCode from '../utils/ColorCode';
+import Render from '../utils/Render';
+import WorldLib from '../utils/WorldLib';
+import TextLib from '../utils/TextLib';
 
 class Eval extends Feature {
 	constructor() {
