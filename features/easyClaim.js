@@ -31,7 +31,8 @@ class EasyClaim extends Feature {
 					if (count == 0) return;
 					if (item.getStackSize() != count) item.setStackSize(count);
 					const [x, y] = Render.getSlotCenter(index);
-					Render.item(ITEM, x, y, 1, 200);
+					// Render.item({ item: ITEM, x, y });
+					Render.rect({ x, y, z: 200, scale: 16, color: Renderer.GOLD });
 				});
 		});
 	}

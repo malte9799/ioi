@@ -28,7 +28,6 @@ class CrateTracker extends Feature {
 			if (!db.CrateTracker[this.lastKey]) db.CrateTracker[this.lastKey] = {};
 			const itemName = `${item} [${chance}%]`;
 			db.CrateTracker[this.lastKey][itemName] = (db.CrateTracker[this.lastKey][itemName] || 0) + 1;
-			logger.chat('Opened: ' + this.lastKey + ' and got ' + itemName);
 		});
 
 		this.registerEvent('playerInteract', (action, pos, event) => {
@@ -38,7 +37,7 @@ class CrateTracker extends Feature {
 		});
 
 		this.registerEvent('guiOpened', () => {
-			Client.scheduleTask(1, () => {
+			Client.scheduleTask(2, () => {
 				if (!Player.getContainer()?.getName()?.getString()?.includes(' Crate')) return;
 				const type = Player.getContainer().getName().getString().slice(0, -6);
 				if (!db.CrateTracker[type]) return;
@@ -54,11 +53,6 @@ class CrateTracker extends Feature {
 						const total = Object.values(db.CrateTracker[type]).reduce((a, b) => a + b, 0);
 						const chance = Math.round((count / total) * 100);
 						this.slots.set(i, { count, chance });
-						// const stackSize = item.getStackSize();
-						// if (stackSize > 1) {
-						// 	item.setName(new TextComponent(`§e${stackSize}x `, item.toMC().getName()));
-						// }
-						// item.setStackSize(count);
 					});
 			});
 		});
@@ -68,29 +62,32 @@ class CrateTracker extends Feature {
 
 		this.registerEvent('postGuiRender', () => {
 			if (this.slots.size == 0) return;
+			if (!Client.isShiftDown()) return;
 			if (!Player.getContainer()?.getName()?.getString()?.includes(' Crate')) return;
 			this.slots.forEach(({ count, chance }, i) => {
 				const [x, y] = Render.getSlotCenter(i);
-				const length = count.toString().length + chance.toString().length;
+				const length = count.toString().length;
+				let scale = 1 - (length - 1) * 0.125;
 				Render.string({
 					text: `${count}`,
-					x: x,
+					x,
 					y: y - 8,
-					scale: 0.5,
 					color: Renderer.GOLD,
+					scale,
 					shadow: true,
 					backgroundColor: Renderer.getColor(0, 0, 0, 100),
-					align: Render.Align.RIGHT,
+					align: Render.TOP,
 				});
 				Render.string({
-					text: `${chance}%`,
-					x: x,
+					text: `§l${chance}%`,
+					x,
 					y: y + 8,
-					scale: 0.5,
-					color: Renderer.LIGHT_PURPLE,
+					z: 500,
+					scale: 0.75,
+					color: Renderer.WHITE,
 					shadow: true,
 					backgroundColor: Renderer.getColor(0, 0, 0, 100),
-					align: Render.Align.RIGHT,
+					align: Render.BOTTOM,
 				});
 			});
 		});
