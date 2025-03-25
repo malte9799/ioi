@@ -128,3 +128,25 @@ global.sounds = new Map();
 // 	console.log(packet.toString());
 // 	ChatLib.chat(packet.toString());
 // });
+//
+
+//
+// import { minecraftClient_hasOutline } from './mixins.js';
+// const PlayerEntity = net.minecraft.entity.player.PlayerEntity;
+// const playerOutlineMap = new Set(['a305d4d6-bec0-4983-ab0a-356a45ae849d']);
+
+// minecraftClient_hasOutline.attach((instance, cir, entity) => {
+// 	if (!entity instanceof PlayerEntity) return;
+// 	const key = entity.getUuid().toString();
+// 	if (playerOutlineMap.has(key)) {
+// 		cir.setReturnValue(true);
+// 	}
+// });
+
+// register('command', (name) => {
+// 	playerOutlineMap.add(World.getPlayerByName('9799ms').getUUID().toString());
+// }).setName('addGlow');
+// register('command', (name) => {
+// 	playerOutlineMap.delete(World.getPlayerByName('9799ms').getUUID().toString());
+// }).setName('removeGlow');
+//
