@@ -4,5 +4,6 @@
 	"author": "9799ms",
 	"version": "0.0.1",
 	"entry": "index.js",
-	"requires": ["PogData"]
+	"requires": ["PogData"],
+	"mixinEntry": "mixins.js"
 }
