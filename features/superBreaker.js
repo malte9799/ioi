@@ -11,6 +11,7 @@ class SuperBreaker extends Feature {
 		this.baseCooldown = 240;
 		this.cooldownT = 0;
 		this.baseLength = 22;
+		this.mineReset = undefined;
 		this.setCooldown = (sec) => {
 			if (isNaN(sec)) {
 				logger.chat(sec);
@@ -54,6 +55,19 @@ class SuperBreaker extends Feature {
 		this.alert = this.registerStep(true, 2, () => {
 			new Sound({ source: 'block.note_block.pling', category: Sound.Category.MASTER, pitch: 1.5, volume: 1 }).play();
 		}).unregister();
+		this.sbcancel = this.registerEvent('playerInteract', (action, pos, event) => {
+			if (action.getName() !== 'UseBlock' && action.getName() !== 'UseItem') return;
+			if (!Player.getHeldItem()?.getType()?.getRegistryName()?.includes('_pickaxe')) return;
+			if (this.mineReset && this.mineReset - Date.now() > 25 * 1000) return;
+			if (this.mineReset && Date.now() > this.mineReset) {
+				this.mineReset = undefined;
+				this.sbcancel.unregister();
+				return;
+			}
+			const sec = Math.floor((this.mineReset - Date.now()) / 1000);
+			logger.chat(`§cCanceled §eSuper Breaker §cactivation, because §athe mine will reset in ${sec} second${sec > 1 ? 's' : ''}.`);
+			cancel(event);
+		}).unregister();
 
 		this.registerChat('You ready your pickaxe.', () => {
 			this.alert.unregister();
@@ -85,6 +99,11 @@ class SuperBreaker extends Feature {
 				this.setCooldown(this.baseCooldown - timeSince);
 			});
 		});
+
+		this.registerChat('Mine ${mine} resetting in ${sec} ${second_s}', (mine, sec, _, event) => {
+			if (!this.mineReset) this.sbcancel.register();
+			this.mineReset = Date.now() + sec * 1000;
+		});
 	}
 
 	onDisable() {
@@ -94,3 +113,5 @@ class SuperBreaker extends Feature {
 module.exports = {
 	class: new SuperBreaker(),
 };
+
+new Date().toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
