@@ -2,6 +2,11 @@
 /// <reference lib="es2015" />
 import Feature from '../class/Feature';
 import logger from '../logger';
+import Util from '../utils/util';
+import ColorCode from '../utils/colorCode';
+import Render from '../utils/renderLib';
+import WorldLib from '../utils/worldLib';
+import TextLib from '../utils/textLib';
 
 class Eval extends Feature {
 	constructor() {
@@ -21,7 +26,10 @@ class Eval extends Feature {
 			try {
 				result = eval(args.join(' '));
 			} catch (e) {
-				result = e;
+				logger.error(`Error in Eval:`);
+				logger.warn(JSON.stringify(e, undefined, 2));
+				if (e.stack) logger.warn(e.stack);
+				throw e;
 			} finally {
 				try {
 					new TextComponent({
