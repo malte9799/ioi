@@ -4,6 +4,7 @@ const VertexConsumers = Client.getMinecraft().getBufferBuilders().getEntityVerte
 const TextRenderer = Renderer.getFontRenderer();
 const TextLayerType = net.minecraft.client.font.TextRenderer.class_6415;
 const NEWLINE_REGEX = /\n|\r\n?/;
+const Color = Java.type('java.awt.Color');
 
 export default class Render {
 	static TOP_LEFT = 'TOP_LEFT';
@@ -15,17 +16,6 @@ export default class Render {
 	static BOTTOM_LEFT = 'BOTTOM_LEFT';
 	static BOTTOM = 'BOTTOM_CENTER';
 	static BOTTOM_RIGHT = 'BOTTOM_RIGHT';
-
-	static HexToRgb(hex) {
-		const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex.toLowerCase());
-		return result
-			? {
-					r: parseInt(result[1], 16),
-					g: parseInt(result[2], 16),
-					b: parseInt(result[3], 16),
-			  }
-			: console.log('Invalid Hex Color: ' + hex);
-	}
 
 	static getPositionMatrix() {
 		return Renderer.matrixStack.toMC().peek().positionMatrix;
