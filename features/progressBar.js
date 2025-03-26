@@ -18,10 +18,10 @@ class ProgressBar extends Feature {
 			cancel(event);
 			const counter = new TextComponent(`§c${current}§7/§a${total}`);
 			const percent = new TextComponent(`§7[${Math.round((current / total) * 10000) / 100}%]`);
-			const length = 20;
+			const length = 50;
 			const barCount = (current / total) * length;
 			const prograssBar = new TextComponent('§7[', `§a${'|'.repeat(barCount)}§c${'|'.repeat(length - barCount)}`, '§7]');
-			ChatLib.actionBar(new TextComponent(prograssBar, '  ', counter, '  ', percent));
+			ChatLib.actionBar(new TextComponent(counter, '  ', prograssBar, '  ', percent));
 		});
 	}
 
