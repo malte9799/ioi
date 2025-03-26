@@ -57,9 +57,9 @@ export default class Feature {
 		this.events[event.id] = event;
 		return event;
 	}
-	registerCommand(name, func, completions) {
+	registerCommand(name, func, completions = undefined) {
 		let event = this.FeatureManager.registerEvent('command', func, this);
-		if (completions) event.trigger.setTabCompletions(completions);
+		if (completions) event.trigger.setTabCompletions(completions || []);
 		event.trigger.setName(name, true);
 		this.events[event.id] = event;
 		return event;
