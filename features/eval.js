@@ -5,7 +5,8 @@ import logger from '../logger';
 import ColorCode from '../utils/ColorCode';
 import Render from '../utils/Render';
 import WorldLib from '../utils/WorldLib';
-import TextLib from '../utils/TextLib';
+import { TextC, TextLib } from '../utils/TextLib';
+const Color = java.awt.Color;
 
 class Eval extends Feature {
 	constructor() {
