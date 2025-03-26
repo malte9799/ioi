@@ -65,6 +65,7 @@ class SuperBreaker extends Feature {
 				return;
 			}
 			const sec = Math.floor((this.mineReset - Date.now()) / 1000);
+			new Sound({ source: 'block.note_block.bass' }).play();
 			logger.chat(`§cCanceled §eSuper Breaker §cactivation, because §athe mine will reset in ${sec} second${sec > 1 ? 's' : ''}.`);
 			cancel(event);
 		}).unregister();
