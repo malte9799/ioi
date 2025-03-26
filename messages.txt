@@ -38,6 +38,7 @@ ${envoy} = 'Envoy' | 'Envoy+'
 | ENVOY | ${player} has looted ${player2}'s ${envoy}!
 
 | EVENT | ${player} has started a Wither Crate Event!
+| EVENT | You just looted a ${crate} Crate!
 
 | EVENTS | ${event} starts in ${time}!
 | EVENTS | ${event} just started!
