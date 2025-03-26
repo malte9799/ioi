@@ -27,62 +27,79 @@ class FeatureManager {
 			this.unloadMain();
 		});
 
-		this.registerEvent('command', () => {
+		this.registerCommand('IOI', () => {
 			// this.Settings.openGUI();
-		}).trigger.setName('IOI');
+		});
 
-		this.registerEvent('command', (args) => {
-			new Thread(() => {
-				this.unloadFeature(args);
-				logger.chat('Feature unloaded: ' + args);
-			}).start();
-		}).trigger.setName('soopyunloadfeature');
-		this.registerEvent('command', (args) => {
-			new Thread(() => {
-				this.loadFeature(args);
-				logger.chat('Feature loaded: ' + args);
-			}).start();
-		}).trigger.setName('soopyloadfeature');
-		this.registerEvent('command', () => {
+		this.registerCommand(
+			'ioiFeatUnload',
+			(args) => {
+				new Thread(() => {
+					this.unloadFeature(args);
+					logger.chat('Feature unloaded: ' + args);
+				}).start();
+			},
+			() => Object.entries(this.features).reduce((acc, [key, feat]) => (feat.class.enabled ? acc.concat(key) : acc), [])
+		);
+		this.registerCommand(
+			'ioiFeatLoad',
+			(args) => {
+				new Thread(() => {
+					this.loadFeature(args);
+					logger.chat('Feature loaded: ' + args);
+				}).start();
+			},
+			() => Object.entries(this.features).reduce((acc, [key, feat]) => (!feat.class.enabled ? acc.concat(key) : acc), [])
+		);
+		this.registerCommand(
+			'ioiFeatReload',
+			(args) => {
+				new Thread(() => {
+					this.unloadFeature(args);
+					this.loadFeature(args);
+				}).start();
+			},
+			() => Object.entries(this.features).reduce((acc, [key, feat]) => (feat.class.enabled ? acc.concat(key) : acc), [])
+		);
+		this.registerCommand('ioiUnload', () => {
 			new NonPooledThread(() => {
 				this.unloadMain();
 			}).start();
-		}).trigger.setName('soopyunload');
-		this.registerEvent('command', () => {
+		});
+		this.registerCommand('ioiLoad', () => {
 			new NonPooledThread(() => {
 				this.loadMain();
 			}).start();
-		}).trigger.setName('soopyload');
-		this.registerEvent('command', () => {
+		});
+		this.registerCommand('ioiReload', () => {
 			new NonPooledThread(() => {
 				this.unloadMain();
 				this.loadMain();
 			}).start();
-		}).trigger.setName('soopyreload');
-		this.registerEvent('command', () => {
-			new Thread(() => {
-				this.unloadFeature(args);
-
-				this.loadFeature(args);
-			}).start();
-		}).trigger.setName('soopyreloadfeature');
-		this.registerEvent('command', () => {
+		});
+		this.registerCommand('ctLoad', () => {
 			new Thread(() => {
 				this.unloadMain();
 				ChatLib.command('ct load');
 			}).start();
-		}).trigger.setName('load');
+		});
+		this.registerCommand('ctUnload', () => {
+			new Thread(() => {
+				this.unloadMain();
+				ChatLib.command('ct unload');
+			}).start();
+		});
 	}
 
 	loadMain() {
-		this.enabled = true;
+		// this.enabled = true;
 		let startLoading = Date.now();
 		this.loadAllFeatures();
 		logger.chat('Loaded!');
 		logger.info('TrappedQOL took ' + ((Date.now() - startLoading) / 1000).toFixed(2) + 's to load');
 	}
 	unloadMain() {
-		this.enabled = false;
+		// this.enabled = false;
 		this.unloadAllFeatures();
 	}
 	loadAllFeatures() {
@@ -137,6 +154,12 @@ class FeatureManager {
 		this.features[feature].class._onDisable();
 		delete this.features[feature];
 		logger.info('□ Unloaded feature ' + feature);
+	}
+	registerCommand(name, func, completions = undefined) {
+		let event = this.registerEvent('command', func, this);
+		if (completions) event.trigger.setTabCompletions(completions || []);
+		event.trigger.setName(name, true);
+		return event;
 	}
 	registerEvent(type, func, context = this) {
 		let id = this.lastEventId++;
