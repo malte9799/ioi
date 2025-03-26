@@ -4,14 +4,15 @@ import Feature from '../class/Feature';
 import logger from '../logger';
 import Render from '../utils/Render';
 import PogObject from 'PogData';
-// import DB from '../db';
+// import this.DB from '../this.DB';
 
+const KeyList = new Set(['minecraft:tripwire_hook', 'minecraft:trial_key', 'minecraft:ominous_trial_key']);
 class CrateTracker extends Feature {
 	constructor() {
 		super();
 
-		DB = new PogObject('trapped', {}, 'data/crates.data.json');
-		DB.autosave();
+		this.DB = new PogObject('trapped', {}, 'data/crates.data.json');
+		this.DB.autosave();
 		this.isDefaultEnabled = true;
 
 		this.lastKey = undefined;
@@ -23,23 +24,25 @@ class CrateTracker extends Feature {
 
 	onEnable() {
 		this.registerChat('| KEYS | You have received ${item} [${cahnce}%]!', (item, chance, event) => {
-			if (!DB[this.lastKey]) DB[this.lastKey] = {};
+			if (!this.DB[this.lastKey]) this.DB[this.lastKey] = {};
 			const itemName = `${item} [${chance}%]`;
-			DB[this.lastKey][itemName] = (DB[this.lastKey][itemName] || 0) + 1;
+			this.DB[this.lastKey][itemName] = (this.DB[this.lastKey][itemName] || 0) + 1;
 		});
 
 		this.registerEvent('playerInteract', (action, pos, event) => {
 			if (action.toString() !== 'UseBlock') return;
-			const keyList = new Set('minecraft:tripwire_hook', 'minecraft:trial_key', 'minecraft:ominous_trial_key');
-			if (!keyList.has(Player.getHeldItem()?.getType()?.getRegistryName())) return;
-			if (Player.getHeldItem().getName().includes('Key')) this.lastKey = ChatLib.removeFormatting(Player.getHeldItem().getName().split(' ')[0]);
+			const item = Player.getHeldItem()?.getType()?.getRegistryName();
+			if (!item || !KeyList.has(item)) return;
+			const [crate, key] = ChatLib.removeFormatting(Player.getHeldItem().getName()).split(' ');
+			if (key.toLowerCase() != 'key') return;
+			this.lastKey = crate;
 		});
 
 		this.registerEvent('guiOpened', () => {
 			Client.scheduleTask(2, () => {
 				if (!Player.getContainer()?.getName()?.getString()?.includes(' Crate')) return;
 				const type = Player.getContainer().getName().getString().slice(0, -6);
-				if (!DB[type]) return;
+				if (!this.DB[type]) return;
 				Player.getContainer()
 					.getItems()
 					.slice(0, -36)
@@ -47,9 +50,9 @@ class CrateTracker extends Feature {
 						if (!item) return;
 						const itemName = ChatLib.removeFormatting(item.getName());
 						if (!itemName.includes('%')) return;
-						const count = DB[type][itemName] || 0;
+						const count = this.DB[type][itemName] || 0;
 						if (count == 0) return;
-						const total = Object.values(DB[type]).reduce((a, b) => a + b, 0);
+						const total = Object.values(this.DB[type]).reduce((a, b) => a + b, 0);
 						const chance = Math.round((count / total) * 100);
 						this.slots.set(i, { count, chance });
 					});
@@ -93,7 +96,7 @@ class CrateTracker extends Feature {
 	}
 
 	onDisable() {
-		DB.save();
+		this.DB.save();
 	}
 }
 module.exports = {
