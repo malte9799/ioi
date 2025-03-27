@@ -104,12 +104,14 @@ class FeatureManager {
 	}
 	loadAllFeatures() {
 		let featuresDir = new File('./config/ChatTriggers/modules/' + metadata.name + '/features');
+		let devFeaturesDir = new File('./config/ChatTriggers/modules/' + metadata.name + '/features/dev');
 
 		let loadedFeatures = new Map();
 		new Thread(() => {
 			this.dataLoader = this.loadFeature('dataLoader').class;
 		}).start();
-		featuresDir.list().forEach((fileName) => {
+		const features = [...featuresDir.list(), ...devFeaturesDir.list().map((e) => 'dev/' + e)];
+		features.forEach((fileName) => {
 			if (!fileName.includes('.js')) return;
 			let feature = fileName.split('.')[0];
 			if (feature == 'dataLoader') return;
