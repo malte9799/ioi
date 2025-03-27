@@ -1,14 +1,14 @@
 import PogObject from 'PogData';
 import metadata from './metadata';
 
-if (!global.trapped.db) {
+if (!global.ioi.db) {
 	const db = new PogObject(metadata.name, {}, 'data/trapped.data.json');
 	db.autosave();
-	global.trapped.db = db;
+	global.ioi.db = db;
 
 	register('gameUnload', () => {
-		global.trapped.db = undefined;
+		global.ioi.db = undefined;
 	});
 }
 
-export default global.trapped.db;
+export default global.ioi.db;

@@ -8,8 +8,8 @@ class Logger {
 		this.isDev = isDev();
 		this.loglevel = this.isDev ? 3 : 2; //0=none, 1=error, 2=warn, 3=info, 4=debug
 		this.logToMcChat = false;
-		this.logPrefixes = ['[I0I]       ', '[I0I:ERROR] ', '[I0I:WARN]  ', '[I0I:INFO]  ', '[I0I:DEBUG] '];
-		this.chatPrefix = '&6[I0I]&7 ';
+		this.logPrefixes = ['[ioi]       ', '[ioi:ERROR] ', '[ioi:WARN]  ', '[ioi:INFO]  ', '[ioi:DEBUG] '];
+		this.chatPrefix = '&6[ioi]&7 ';
 		this.info('Logger initialised');
 	}
 
@@ -38,9 +38,9 @@ class Logger {
 	}
 
 	format(msg) {
-		msg = 'I0I ' + msg;
+		msg = 'ioi ' + msg;
 		try {
-			msg = msg.replaceAll('\n', '\nI0I ');
+			msg = msg.replaceAll('\n', '\nioi ');
 		} catch (e) {}
 		msg.match(/net\.minecraft\.class_\d*/gm)?.forEach((e) => {
 			try {
@@ -62,10 +62,10 @@ function isDev() {
 	return devs.includes(Player.getUUID().toString().replace(/-/g, ''));
 }
 
-if (!global.trapped.logger) {
-	global.trapped.logger = new Logger();
+if (!global.ioi.logger) {
+	global.ioi.logger = new Logger();
 	register('gameUnload', () => {
-		global.trapped.logger = undefined;
+		global.ioi.logger = undefined;
 	});
 }
-export default global.trapped.logger;
+export default global.ioi.logger;

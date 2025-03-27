@@ -8,7 +8,7 @@ class FeatureManager {
 	constructor() {
 		this.parent = undefined;
 		this.enabled = true;
-		this.messagePrefix = logger.chatPrefix || '&6[I0I]&7 ';
+		this.messagePrefix = logger.chatPrefix || '&6[ioi]&7 ';
 		this.isDev = logger.isDev;
 
 		this.features = [];
@@ -218,10 +218,10 @@ class FeatureManager {
 	}
 }
 
-if (!global.trapped.featureManager) {
-	global.trapped.featureManager = new FeatureManager();
+if (!global.ioi.featureManager) {
+	global.ioi.featureManager = new FeatureManager();
 	register('gameUnload', () => {
-		global.trapped.featureManager = undefined;
+		global.ioi.featureManager = undefined;
 	});
 }
-export default global.trapped.featureManager;
+export default global.ioi.featureManager;

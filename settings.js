@@ -287,13 +287,13 @@ class SettingsClass {
 	}
 }
 
-if (!global.trapped.settings) {
-	global.trapped.settings = new SettingsClass();
+if (!global.ioi.settings) {
+	global.ioi.settings = new SettingsClass();
 	register('gameUnload', () => {
-		global.trapped.settings = undefined;
+		global.ioi.settings = undefined;
 	});
 }
-export default global.trapped.settings;
+export default global.ioi.settings;
 
 // Settings.addProperty('SWITCH', {
 // 	name: 'Example Switch',

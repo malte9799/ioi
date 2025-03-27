@@ -1,9 +1,9 @@
-if (!global.trapped.metadata) {
-	global.trapped.metadata = JSON.parse(FileLib.read('trapped', 'metadata.json'));
+if (!global.ioi.metadata) {
+	global.ioi.metadata = JSON.parse(FileLib.read('trapped', 'metadata.json'));
 
 	register('gameUnload', () => {
-		global.trapped.metadata = undefined;
+		global.ioi.metadata = undefined;
 	});
 }
 
-export default global.trapped.metadata;
+export default global.ioi.metadata;
