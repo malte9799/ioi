@@ -1,9 +1,8 @@
 /// <reference types="../../CTAutocomplete" />
 /// <reference lib="es2015" />
-import Feature from '../class/Feature';
-import logger from '../logger';
+import Feature from 'ioi/class/Feature';
 
-class _ extends Feature {
+class __________ extends Feature {
 	constructor() {
 		super();
 
@@ -12,19 +11,12 @@ class _ extends Feature {
 		this.isTogglable = true;
 	}
 
-	initSettings(Settings) {
-		Settings.addProperty('SWITCH', {
-			name: 'Base',
-			descrption: 'Demo Switsch Setting',
-			category: '',
-			subcategory: '',
-		});
-	}
+	initSettings(Settings) {}
 
 	onEnable() {}
 
 	onDisable() {}
 }
 module.exports = {
-	class: new _(),
+	class: new __________(),
 };

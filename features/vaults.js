@@ -1,8 +1,8 @@
 /// <reference types="../../CTAutocomplete" />
 /// <reference lib="es2015" />
-import Feature from '../class/Feature';
-import logger from '../logger';
-import Render from '../utils/Render';
+import Feature from 'ioi/class/Feature';
+import logger from 'ioi/logger';
+import Render from 'ioi/utils/Render';
 
 const ITEM = new Item(new ItemType('minecraft:dirt'));
 

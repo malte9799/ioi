@@ -1,8 +1,8 @@
-import logger from '../logger.js';
-import NonPooledThread from '../utils/nonPooledThread.js';
-const File = Java.type('java.io.File');
-import metadata from '../metadata.js';
+import NonPooledThread from 'ioi/utils/nonPooledThread.js';
+import metadata from 'ioi/metadata.js';
+import logger from 'ioi/logger.js';
 // import settings from '../settings.js';
+const File = Java.type('java.io.File');
 
 class FeatureManager {
 	constructor() {
@@ -96,7 +96,7 @@ class FeatureManager {
 		let startLoading = Date.now();
 		this.loadAllFeatures();
 		logger.chat('Loaded!');
-		logger.info('TrappedQOL took ' + ((Date.now() - startLoading) / 1000).toFixed(2) + 's to load');
+		logger.info('TrappedIoI took ' + ((Date.now() - startLoading) / 1000).toFixed(2) + 's to load');
 	}
 	unloadMain() {
 		// this.enabled = false;

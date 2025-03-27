@@ -1,17 +1,15 @@
 /// <reference types="../../CTAutocomplete" />
 /// <reference lib="es2015" />
-import Feature from '../class/Feature';
-import logger from '../logger';
-import Render from '../utils/Render';
+import Feature from 'ioi/class/Feature';
+import Render from 'ioi/utils/Render';
 import PogObject from 'PogData';
-// import this.DB from '../this.DB';
 
 const KeyList = new Set(['minecraft:tripwire_hook', 'minecraft:trial_key', 'minecraft:ominous_trial_key']);
 class CrateTracker extends Feature {
 	constructor() {
 		super();
 
-		this.DB = new PogObject('trapped', {}, 'data/crates.data.json');
+		this.DB = new PogObject('ioi', {}, 'data/crates.data.json');
 		this.DB.autosave();
 		this.isDefaultEnabled = true;
 

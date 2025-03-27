@@ -1,8 +1,8 @@
 import PogObject from 'PogData';
-import metadata from './metadata';
+import metadata from 'ioi/metadata';
 
 if (!global.ioi.db) {
-	const db = new PogObject(metadata.name, {}, 'data/trapped.data.json');
+	const db = new PogObject(metadata.name, {}, 'data/ioi.data.json');
 	db.autosave();
 	global.ioi.db = db;
 

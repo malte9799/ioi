@@ -1,5 +1,31 @@
-import TextLib from '../utils/TextLib';
 const Color = java.awt.Color;
+
+const mapStyle = (s) => ({ color: s.color?.getName() || 'white', decoration: { bold: s.bold, italic: s.italic, underlined: s.underlined, strikethrough: s.strikethrough, obfuscated: s.obfuscated } });
+const ColorCode = {
+	BLACK: '§0',
+	DARK_BLUE: '§1',
+	DARK_GREEN: '§2',
+	DARK_AQUA: '§3',
+	DARK_RED: '§4',
+	DARK_PURPLE: '§5',
+	GOLD: '§6',
+	GRAY: '§7',
+	DARK_GRAY: '§8',
+	BLUE: '§9',
+	GREEN: '§a',
+	AQUA: '§b',
+	RED: '§c',
+	LIGHT_PURPLE: '§d',
+	YELLOW: '§e',
+	WHITE: '§f',
+
+	OBFUSCATED: '§k',
+	BOLD: '§l',
+	STRIKETHROUGH: '§m',
+	UNDERLINE: '§n',
+	ITALIC: '§o',
+	RESET: '§r',
+};
 
 export default class TextC {
 	constructor(...args) {
@@ -12,7 +38,8 @@ export default class TextC {
 				return acc;
 			}, []);
 		});
-		this.text = new TextComponent(...args);
+		if (args.length == 1 && args[0] instanceof TextComponent) this.text = args[0];
+		else this.text = new TextComponent(...args);
 		this.formattedText = this.text.formattedText;
 		this.unformattedText = this.text.unformattedText;
 		this.size = this.text.size;
@@ -25,11 +52,11 @@ export default class TextC {
 		return siblings.reduce((acc, sibling) => {
 			if (!sibling) return acc;
 
-			let { color, decoration } = TextLib.mapStyle(sibling.getStyle());
+			let { color, decoration } = mapStyle(sibling.getStyle());
 			if (color[0] == '#') color = '§' + color;
 			else color = ColorCode[color.toUpperCase()];
 			const modifier = Object.entries(decoration).reduce((acc, [key, value]) => {
-				acc += value ? TextLib.ColorCode[key.toUpperCase()] || '' : '';
+				acc += value ? ColorCode[key.toUpperCase()] || '' : '';
 				return acc;
 			}, '');
 

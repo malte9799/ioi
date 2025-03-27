@@ -1,9 +1,8 @@
 /// <reference types="../../CTAutocomplete" />
 /// <reference lib="es2015" />
-import Feature from '../class/Feature';
-import logger from '../logger';
+import Feature from 'ioi/class/Feature';
 
-const quickActionKey = new KeyBind('Quick Action', Keyboard.KEY_R, 'TrappedMC');
+const quickActionKey = new KeyBind('Quick Action', Keyboard.KEY_R, 'TrappedIoI');
 
 class QuickAction extends Feature {
 	constructor() {

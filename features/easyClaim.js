@@ -1,8 +1,7 @@
 /// <reference types="../../CTAutocomplete" />
 /// <reference lib="es2015" />
-import Feature from '../class/Feature';
-import logger from '../logger';
-import Render from '../utils/Render';
+import Feature from 'ioi/class/Feature';
+import Render from 'ioi/utils/Render';
 
 const ITEM = new Item(new ItemType('minecraft:lime_stained_glass_pane'));
 class EasyClaim extends Feature {

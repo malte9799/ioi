@@ -1,6 +1,5 @@
-import logger from './logger.js';
-import metadata from './metadata.js';
-// import ret from "./utils/renderUtils.js";
+import logger from 'ioi/logger';
+import metadata from 'ioi/metadata';
 
 // prettier-ignore
 import {
@@ -68,7 +67,7 @@ const JSBackedPropertyValue = (config, propName, type) => ({
 	},
 });
 
-@Vigilant(metadata.name, '§6TrappedMC', {
+@Vigilant(metadata.name, '§6TrappedIoI', {
 	getCategoryComparator: () => (a, b) => {
 		const categories = ['array of your category names'];
 

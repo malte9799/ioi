@@ -1,8 +1,6 @@
 /// <reference types="../../CTAutocomplete" />
 /// <reference lib="es2015" />
-import Feature from '../class/Feature';
-import logger from '../logger';
-import Render from '../utils/Render';
+import Feature from 'ioi/class/Feature';
 
 class Auction extends Feature {
 	constructor() {

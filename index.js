@@ -2,7 +2,7 @@
 /// <reference lib="es2015" />
 
 if (!global.ioi) global.ioi = {};
-class TrappedQOL {
+class TrappedIoI {
 	constructor() {
 		this.FeatureManager = require('./class/FeatureManager.js');
 		this.FeatureManager.parent = this;
@@ -10,7 +10,7 @@ class TrappedQOL {
 }
 
 let main = register('worldLoad', () => {
-	new TrappedQOL();
+	new TrappedIoI();
 	new Sound({ source: 'ui.loom.select_pattern', category: Sound.Category.MASTER, pitch: 1.5, volume: 0.4 }).play();
 	new Sound({ source: 'ui.toast.in', category: Sound.Category.MASTER, pitch: 1.5, volume: 2 }).play();
 

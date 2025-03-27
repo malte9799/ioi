@@ -1,7 +1,7 @@
 /// <reference types="../../CTAutocomplete" />
 /// <reference lib="es2015" />
-import Feature from '../class/Feature';
-import logger from '../logger';
+import Feature from 'ioi/class/Feature';
+import logger from 'ioi/logger';
 
 class SuperBreaker extends Feature {
 	constructor() {
@@ -101,7 +101,11 @@ class SuperBreaker extends Feature {
 			});
 		});
 
-		this.registerChat('Mine ${mine} resetting in ${sec} ${second_s}', (mine, sec, _, event) => {
+		this.registerChat('Mine ${mine} resetting in ${sec} seconds', (mine, sec, _, event) => {
+			if (!this.mineReset) this.sbcancel.register();
+			this.mineReset = Date.now() + sec * 1000;
+		});
+		this.registerChat('coal resetting in ${sec} seconds', (sec) => {
 			if (!this.mineReset) this.sbcancel.register();
 			this.mineReset = Date.now() + sec * 1000;
 		});
