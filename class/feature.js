@@ -88,9 +88,9 @@ export default class Feature {
 		this.events[event.id] = event;
 		return event;
 	}
-	registerSoundPlay(criteria, func) {
+	registerSoundPlay(criteria = undefined, func) {
 		let event = this.FeatureManager.registerEvent('soundPlay', func, this);
-		event.trigger.setCriteria(criteria);
+		if (criteria) event.trigger.setCriteria(criteria);
 		this.events[event.id] = event;
 		return event;
 	}
