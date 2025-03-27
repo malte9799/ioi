@@ -5,8 +5,17 @@ import logger from '../logger';
 import ColorCode from '../utils/ColorCode';
 import Render from '../utils/Render';
 import WorldLib from '../utils/WorldLib';
-import { TextC, TextLib } from '../utils/TextLib';
+import TextLib from '../utils/TextLib';
+import TextC from '../wrapped/TextComponent';
+import Utils from '../utils/util';
 const Color = java.awt.Color;
+const DataComponentTypes = net.minecraft.component.DataComponentTypes;
+const ComponentMap = net.minecraft.component.ComponentMap;
+const Jsos = net.minecraft.util.dynamic.ops.JsonOps;
+const NbtOps = net.minecraft.nbt.NbtOps;
+
+const dir = console.dir;
+const log = console.log;
 
 class Eval extends Feature {
 	constructor() {
@@ -20,6 +29,8 @@ class Eval extends Feature {
 	initSettings(Settings) {}
 
 	onEnable() {
+		this.FM = this.FeatureManager;
+		this.FEATS = this.FM.features;
 		this.registerCommand('eval', (...args) => {
 			const id = Math.floor(Math.random() * java.lang.Integer.MAX_VALUE);
 			let result;
