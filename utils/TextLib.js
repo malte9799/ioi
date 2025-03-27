@@ -1,6 +1,6 @@
 // import ColorCode from './ColorCode';
 // import Render from './Render';
-import TextC from '../wrapped/TextComponent';
+import TextC from 'ioi/wrapped/TextComponent';
 const Color = java.awt.Color;
 
 export default class TextLib {
