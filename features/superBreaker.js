@@ -52,8 +52,9 @@ class SuperBreaker extends Feature {
 	}
 
 	onEnable() {
-		this.alert = this.registerStep(true, 2, () => {
-			new Sound({ source: 'block.note_block.pling', category: Sound.Category.MASTER, pitch: 1.5, volume: 1 }).play();
+		this.alert = this.registerStep(false, 2, () => {
+			// if (Client.getMinecraft().isWindowFocused())
+			new Sound({ source: 'minecraft:item.trident.riptide_3', category: Sound.Category.MASTER, volume: 0.25, pitch: 1 }).play();
 		}).unregister();
 		this.sbcancel = this.registerEvent('playerInteract', (action, pos, event) => {
 			if (action.getName() !== 'UseBlock' && action.getName() !== 'UseItem') return;
@@ -74,6 +75,7 @@ class SuperBreaker extends Feature {
 			this.alert.unregister();
 		});
 		this.registerChat('**SUPER BREAKER ACTIVATED**', () => {
+			this.alert.unregister();
 			this.cooldownT = Date.now();
 			this.setCooldown(this.baseLength);
 		});
@@ -82,7 +84,8 @@ class SuperBreaker extends Feature {
 			new Sound({ source: 'minecraft:block.conduit.deactivate' }).play();
 			this.setCooldown(this.baseCooldown);
 		});
-		this.registerChat('Your Super Breaker ability is refreshed!', () => {
+		this.registerChat('Your Super Breaker ability is refreshed!', (event) => {
+			if (Date.now() - this.cooldownT < this.baseLength * 1000) return cancel(event);
 			this.alert.register();
 			this.cooldownT = 0;
 			if (this.hasCooldown()) {
@@ -93,14 +96,6 @@ class SuperBreaker extends Feature {
 			if (this.hasCooldown()) return;
 			this.setCooldown(sec);
 		});
-		this.registerEvent('worldLoad', () => {
-			let timeSince = Math.floor((Date.now() - this.cooldownT) / 1000);
-			if (timeSince >= this.baseCooldown) return (this.cooldownT = 0);
-			Client.scheduleTask(1, () => {
-				this.setCooldown(this.baseCooldown - timeSince);
-			});
-		});
-
 		this.registerChat('Mine ${mine} resetting in ${sec} seconds', (mine, sec, _, event) => {
 			if (!this.mineReset) this.sbcancel.register();
 			this.mineReset = Date.now() + sec * 1000;
@@ -108,6 +103,13 @@ class SuperBreaker extends Feature {
 		this.registerChat('coal resetting in ${sec} seconds', (sec) => {
 			if (!this.mineReset) this.sbcancel.register();
 			this.mineReset = Date.now() + sec * 1000;
+		});
+		this.registerEvent('worldLoad', () => {
+			let timeSince = Math.floor((Date.now() - this.cooldownT) / 1000);
+			if (timeSince >= this.baseCooldown) return (this.cooldownT = 0);
+			Client.scheduleTask(1, () => {
+				this.setCooldown(this.baseCooldown - timeSince);
+			});
 		});
 	}
 
