@@ -1,6 +1,7 @@
-// import ColorCode from './ColorCode';
-// import Render from './Render';
-import TextC from 'ioi/wrapped/TextComponent';
+/// <reference types="../../CTAutocomplete" />
+/// <reference lib="es2015" />
+
+import TextComponent_ from 'ioi/wrapped/TextComponent';
 const Color = java.awt.Color;
 
 export default class TextLib {
@@ -47,7 +48,7 @@ export default class TextLib {
 	static gradientString(text, startColor, endColor) {
 		const letters = text.split('');
 		const colors = TextLib.getColorGradient(startColor, endColor, letters.length);
-		return new TextC(letters.map((letter, index) => ({ text: letter, color: colors[index] })));
+		return new TextComponent_(letters.map((letter, index) => ({ text: letter, color: colors[index] })));
 	}
 	/**
 	 * Convert RGB color array to hex color string

@@ -27,7 +27,7 @@ const ColorCode = {
 	RESET: '§r',
 };
 
-export default class TextC {
+export default class TextComponent_ {
 	constructor(...args) {
 		args = args.map((e) => {
 			if (typeof e !== 'string' || !e.includes('§#')) return e;

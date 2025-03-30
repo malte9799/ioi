@@ -1,7 +1,7 @@
 /// <reference types="../../CTAutocomplete" />
 /// <reference lib="es2015" />
 import Feature from 'ioi/class/Feature';
-import ColorCode from 'ioi/utils/ColorCode';
+import TextLib from '../utils/TextLib';
 
 class Emblems extends Feature {
 	constructor() {
@@ -60,15 +60,15 @@ class Emblems extends Feature {
 	getBossBarNameColor(type) {
 		switch (type) {
 			case 'Haste I':
-				return ColorCode.YELLOW;
+				return TextLib.ColorCode.YELLOW;
 			case 'Haste II':
-				return ColorCode.GREEN;
+				return TextLib.ColorCode.GREEN;
 			case 'Haste III':
-				return ColorCode.GOLD;
+				return TextLib.ColorCode.GOLD;
 			case 'Fishing Frenzy I':
-				return ColorCode.AQUA;
+				return TextLib.ColorCode.AQUA;
 			default:
-				return ColorCode.WHITE;
+				return TextLib.ColorCode.WHITE;
 		}
 	}
 	getBossBarColor(type) {
