@@ -1,8 +1,9 @@
 /// <reference types="../../CTAutocomplete" />
 /// <reference lib="es2015" />
 import Feature from 'ioi/class/Feature';
-import Render from 'ioi/utils/Render';
+import RenderLib2d from 'ioi/utils/RenderLib2d';
 import PogObject from 'PogData';
+import RendererUtils, { Align } from '../utils/RendererUtils';
 
 const KeyList = new Set(['minecraft:tripwire_hook', 'minecraft:trial_key', 'minecraft:ominous_trial_key']);
 class CrateTracker extends Feature {
@@ -65,10 +66,10 @@ class CrateTracker extends Feature {
 			if (!Client.isShiftDown()) return;
 			if (!Player.getContainer()?.getName()?.getString()?.includes(' Crate')) return;
 			this.slots.forEach(({ count, chance }, i) => {
-				const [x, y] = Render.getSlotCenter(i);
+				const [x, y] = RendererUtils.getSlotCenter(i);
 				const length = count.toString().length;
 				let scale = 1 - (length - 1) * 0.125;
-				Render.string({
+				RenderLib2d.drawString({
 					text: `${count}`,
 					x,
 					y: y - 8,
@@ -76,18 +77,18 @@ class CrateTracker extends Feature {
 					scale,
 					shadow: true,
 					backgroundColor: Renderer.getColor(0, 0, 0, 100),
-					align: Render.TOP,
+					align: Align.TOP,
 				});
-				Render.string({
+				RenderLib2d.drawString({
 					text: `§l${chance}%`,
 					x,
 					y: y + 8,
-					z: 500,
+					z: 400,
 					scale: 0.75,
 					color: Renderer.WHITE,
 					shadow: true,
 					backgroundColor: Renderer.getColor(0, 0, 0, 100),
-					align: Render.BOTTOM,
+					align: Align.BOTTOM,
 				});
 			});
 		});

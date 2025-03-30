@@ -1,8 +1,7 @@
 /// <reference types="../../CTAutocomplete" />
 /// <reference lib="es2015" />
 import Feature from 'ioi/class/Feature';
-import logger from 'ioi/logger';
-import Render from 'ioi/utils/Render';
+import RenderLib2d from 'ioi/utils/RenderLib2d';
 
 const ITEM = new Item(new ItemType('minecraft:dirt'));
 
@@ -30,7 +29,7 @@ class Base extends Feature {
 			if (itemName == 'minecraft:iron_bars') return;
 			const vault = ChatLib.removeFormatting(slot.item.getName()).split(' ')[1];
 			if (!this.vaultItems[vault]) {
-				Render.centerString('Not Cached', Renderer.screen.getWidth() / 2, 100, Renderer.YELLOW);
+				RenderLib2d.drawString({ text: 'Not Cached', x: Renderer.screen.getWidth() / 2, y: 100, color: Renderer.YELLOW });
 			} else {
 				// TODO: Render Vault Items
 			}

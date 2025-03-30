@@ -1,9 +1,9 @@
 /// <reference types="../../CTAutocomplete" />
 /// <reference lib="es2015" />
 import Feature from 'ioi/class/Feature';
-import Render from 'ioi/utils/Render';
+import RenderLib2d from 'ioi/utils/RenderLib2d';
+import RendererUtils, { Align } from '../utils/RendererUtils';
 
-const ITEM = new Item(new ItemType('minecraft:lime_stained_glass_pane'));
 class EasyClaim extends Feature {
 	constructor() {
 		super();
@@ -29,9 +29,8 @@ class EasyClaim extends Feature {
 					const count = lore.match(/You have ([0-9.]+)/)[1];
 					if (count == 0) return;
 					if (item.getStackSize() != count) item.setStackSize(count);
-					const [x, y] = Render.getSlotCenter(index);
-					// Render.item({ item: ITEM, x, y });
-					Render.rect({ x, y, z: 200, scale: 16, color: Renderer.GOLD });
+					const { x, y } = RendererUtils.getSlotPos(index);
+					RenderLib2d.drawRect({ x, y, scale: 16, color: Renderer.GOLD });
 				});
 		});
 	}

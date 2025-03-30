@@ -1,3 +1,8 @@
+const HandledScreenMixin = new Mixin('net.minecraft.client.gui.screen.ingame.HandledScreen');
+
+HandledScreenMixin.widenField('x');
+HandledScreenMixin.widenField('y');
+
 // const EntityMixin = new Mixin('net.minecraft.entity.Entity');
 // const MinecraftClientMixin = new Mixin('net.minecraft.client.MinecraftClient');
 
