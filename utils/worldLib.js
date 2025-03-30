@@ -1,3 +1,6 @@
+/// <reference types="../../CTAutocomplete" />
+/// <reference lib="es2015" />
+
 export default class WroldLib {
 	static getBlocksInDistance(type, point, distance) {
 		const blocks = [];

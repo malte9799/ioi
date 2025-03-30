@@ -1,3 +1,6 @@
+/// <reference types="../../CTAutocomplete" />
+/// <reference lib="es2015" />
+
 const ComponentMap = net.minecraft.component.ComponentMap;
 const NbtOps = net.minecraft.nbt.NbtOps;
 const AbstractNbtList = net.minecraft.nbt.AbstractNbtList;
