@@ -1,6 +1,28 @@
 /// <reference types="../CTAutocomplete" />
 /// <reference lib="es2015" />
 
+//#region Mixins
+import { onBlockBreak, onBlockPlace, onPreBlockPlace } from './mixins.js';
+const onBlockBreakTrigger = createCustomTrigger('blockBreak');
+const onBlockplaceTrigger = createCustomTrigger('blockPlace');
+onBlockBreak.attach((instance, cir, pos) => {
+	if (!World.isLoaded()) return;
+	const block = World.getBlockAt(new BlockPos(pos));
+	onBlockBreakTrigger.trigger(block);
+});
+
+let placedItem;
+onPreBlockPlace.attach((instance, cir, itemPlacementContext) => {
+	if (!World.isLoaded()) return;
+	placedItem = new Item(itemPlacementContext.getStack());
+});
+onBlockPlace.attach((instance, cir, itemPlacementContext) => {
+	if (!World.isLoaded()) return;
+	const pos = itemPlacementContext.getBlockPos();
+	onBlockplaceTrigger.trigger(World.getBlockAt(new BlockPos(pos)), placedItem || new Item(itemPlacementContext.getStack()));
+});
+//#endregion
+
 if (!global.ioi) global.ioi = {};
 class TrappedIoI {
 	constructor() {
@@ -17,6 +39,7 @@ let main = register('worldLoad', () => {
 	main.unregister();
 });
 
+//#region DEBUG
 const mapping = [
 	'class_2604', //EntitySpawnS2CPacket
 	'class_2616', //EntityAnimationS2CPacket
@@ -142,3 +165,4 @@ const packetIgnore = [];
 // 	playerOutlineMap.delete(World.getPlayerByName('9799ms').getUUID().toString());
 // }).setName('removeGlow');
 //
+//#endregion
