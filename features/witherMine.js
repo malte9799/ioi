@@ -1,7 +1,6 @@
 /// <reference types="../../CTAutocomplete" />
 /// <reference lib="es2015" />
 import Feature from 'ioi/class/Feature';
-import Render from 'ioi/utils/Render';
 
 const HOE = new Item(new ItemType('minecraft:sponge'));
 const SHOVEL = new Item(new ItemType('minecraft:soul_sand'));
@@ -21,9 +20,11 @@ class WitherMine extends Feature {
 			if (this.dataLoader.getLocation() != 'Wither Mine') return;
 			const x = Renderer.screen.getWidth() / 2;
 			const y = Renderer.screen.getHeight() / 2;
-			if (Player.getHeldItem()?.getType()?.getRegistryName()?.includes('_hoe')) Render.item({ item: HOE, x, y, scale: 2 });
-			if (Player.getHeldItem()?.getType()?.getRegistryName()?.includes('_shovel')) Render.item({ item: SHOVEL, x, y, scale: 2 });
-			if (Player.getHeldItem()?.getType()?.getRegistryName()?.includes('_axe')) Render.item({ item: AXE, x, y, scale: 2 });
+			const item = Player.getHeldItem()?.getType()?.getRegistryName();
+			if (!item) return;
+			if (item.includes('_hoe')) HOE.draw(x, y, 2);
+			if (item.includes('_shovel')) SHOVEL.draw(x, y, 2);
+			if (item.includes('_axe')) AXE.draw(x, y, 2);
 		});
 	}
 
