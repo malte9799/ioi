@@ -66,7 +66,7 @@ class CrateTracker extends Feature {
 			if (!Client.isShiftDown()) return;
 			if (!Player.getContainer()?.getName()?.getString()?.includes(' Crate')) return;
 			this.slots.forEach(({ count, chance }, i) => {
-				const [x, y] = RendererUtils.getSlotCenter(i);
+				const { x, y } = RendererUtils.getSlotCenter(i);
 				const length = count.toString().length;
 				let scale = 1 - (length - 1) * 0.125;
 				RenderLib2d.drawString({
