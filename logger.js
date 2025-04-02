@@ -13,17 +13,6 @@ class Logger {
 		this.info('Logger initialised');
 	}
 
-	logMessage(message, level = 0, type = 'log') {
-		if (level <= this.loglevel) {
-			if (type == 'log') console.log(this.logPrefixes[level] + message);
-			else if (type == 'dir') console.dir(message);
-
-			if (this.logToMcChat) {
-				ChatLib.chat(this.logPrefixes[level] + message);
-			}
-		}
-	}
-
 	log(msg) {
 		Console.println(this.format(msg), LogType.INFO);
 	}
