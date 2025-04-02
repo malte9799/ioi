@@ -13,12 +13,8 @@ class Chambers extends Feature {
 	initSettings(Settings) {}
 
 	onEnable() {
-		this.registerSoundPlay('minecraft:entity.elder_guardian.ambient', (pos) => {
-			const x = Math.floor(pos.getX());
-			const y = Math.floor(pos.getY());
-			const z = Math.floor(pos.getZ());
-			logger.chat('Chamber: ' + x + ', ' + y + ', ' + z);
-		});
+		this.registerChat('| CHAMBERS | You have entered a secret chamber!', () => {});
+		this.registerSoundPlay('minecraft:entity.elder_guardian.ambient', (pos) => {});
 	}
 
 	onDisable() {}
