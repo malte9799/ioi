@@ -6,7 +6,7 @@ class __________ extends Feature {
 		super();
 
 		this.isDefaultEnabled = false;
-		this.isHidden = false;
+		this.isHidden = true;
 		this.isTogglable = true;
 	}
 
