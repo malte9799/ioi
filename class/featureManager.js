@@ -1,7 +1,10 @@
 import NonPooledThread from 'ioi/utils/nonPooledThread.js';
 import metadata from 'ioi/metadata.js';
 import logger from 'ioi/logger.js';
+import huds from 'ioi/huds.js';
+import tabcompletion from 'ioi/utils/tabcompletion.js';
 // import settings from '../settings.js';
+
 const File = Java.type('java.io.File');
 
 class FeatureManager {
@@ -11,13 +14,14 @@ class FeatureManager {
 		this.messagePrefix = logger.chatPrefix || '&6[ioi]&7 ';
 		this.isDev = logger.isDev;
 
-		this.features = [];
+		this.featureNames = [];
+		this.features = {};
 		this.events = {};
 		this.lastEventId = 0;
 
 		// this.Settings = settings;
 
-		this.longEventTime = 10;
+		this.longEventTime = 20;
 
 		new NonPooledThread(() => {
 			this.loadMain();
@@ -27,56 +31,84 @@ class FeatureManager {
 			this.unloadMain();
 		});
 
-		this.registerCommand('IOI', () => {
-			// this.Settings.openGUI();
-		});
+		this.registerCommand(
+			'ioi',
+			(...args) => {
+				switch (args[0]) {
+					case 'load':
+						new NonPooledThread(() => {
+							this.loadMain();
+						}).start();
+						break;
 
-		this.registerCommand(
-			'ioiFeatUnload',
-			(args) => {
-				new Thread(() => {
-					this.unloadFeature(args);
-					logger.chat('Feature unloaded: ' + args);
-				}).start();
+					case 'unload':
+						new NonPooledThread(() => {
+							this.unloadMain();
+						}).start();
+						break;
+
+					case 'reload':
+						new NonPooledThread(() => {
+							this.unloadMain();
+							this.loadMain();
+						}).start();
+						break;
+
+					case 'editHud':
+						huds.open();
+						break;
+
+					case 'feature':
+						const feat = args[2];
+						if (!feat) args[1] = '';
+						switch (args[1]) {
+							case 'load':
+								new Thread(() => {
+									if (this.loadFeature(feat)) logger.chat('Feature loaded: §r' + feat);
+								}).start();
+								break;
+
+							case 'unload':
+								new Thread(() => {
+									if (this.unloadFeature(feat)) logger.chat('Feature loaded: §r' + feat);
+								}).start();
+								break;
+
+							case 'reload':
+								new Thread(() => {
+									this.unloadFeature(feat);
+									if (this.loadFeature(feat)) logger.chat('Feature reloaded: §r' + feat);
+								}).start();
+								break;
+
+							default:
+								logger.chat('Feature list:');
+								this.featureNames.forEach((e) => {
+									const status = this.features[e] ? '§a§l✔' : '§c§l✘';
+									logger.chat(status + '§r ' + e);
+								});
+								break;
+						}
+						break;
+					default:
+						logger.chat('help');
+						break;
+				}
 			},
-			() => Object.entries(this.features).reduce((acc, [key, feat]) => (feat.class.enabled ? acc.concat(key) : acc), [])
+			tabcompletion({
+				load: [],
+				unload: [],
+				reload: [],
+				feature: {
+					load: () => this.featureNames.filter((e) => !this.features[e]),
+					unload: () => this.featureNames.filter((e) => this.features[e]),
+					reload: () => this.featureNames.filter((e) => this.features[e]),
+					list: [],
+				},
+				editHud: [],
+			})
 		);
-		this.registerCommand(
-			'ioiFeatLoad',
-			(args) => {
-				new Thread(() => {
-					this.loadFeature(args);
-					logger.chat('Feature loaded: ' + args);
-				}).start();
-			},
-			() => Object.entries(this.features).reduce((acc, [key, feat]) => (!feat.class.enabled ? acc.concat(key) : acc), [])
-		);
-		this.registerCommand(
-			'ioiFeatReload',
-			(args) => {
-				new Thread(() => {
-					this.unloadFeature(args);
-					this.loadFeature(args);
-				}).start();
-			},
-			() => Object.entries(this.features).reduce((acc, [key, feat]) => (feat.class.enabled ? acc.concat(key) : acc), [])
-		);
-		this.registerCommand('ioiUnload', () => {
-			new NonPooledThread(() => {
-				this.unloadMain();
-			}).start();
-		});
-		this.registerCommand('ioiLoad', () => {
-			new NonPooledThread(() => {
-				this.loadMain();
-			}).start();
-		});
-		this.registerCommand('ioiReload', () => {
-			new NonPooledThread(() => {
-				this.unloadMain();
-				this.loadMain();
-			}).start();
-		});
+
 		this.registerCommand('ctLoad', () => {
 			new Thread(() => {
 				this.unloadMain();
@@ -91,6 +123,10 @@ class FeatureManager {
 		});
 	}
 
+	getId() {
+		return 'FeatureManager';
+	}
+
 	loadMain() {
 		// this.enabled = true;
 		let startLoading = Date.now();
@@ -102,7 +138,9 @@ class FeatureManager {
 		// this.enabled = false;
 		this.unloadAllFeatures();
 	}
+
 	loadAllFeatures() {
+		this.featureNames = [];
 		let featuresDir = new File('./config/ChatTriggers/modules/' + metadata.name + '/features');
 		let devFeaturesDir = new File('./config/ChatTriggers/modules/' + metadata.name + '/features/dev');
 
@@ -121,21 +159,18 @@ class FeatureManager {
 				loadedFeatures.set(feature, true);
 			}).start();
 		});
-		while ([...loadedFeatures.values()].some((a) => !a)) {
-			Thread.sleep(100);
-		}
 	}
 	loadFeature(feature) {
-		feature = feature.split('.')[0];
-		if (this.features[feature]) return;
+		feature = feature.replace('.js', '');
+		if (this.features[feature]) return false;
 		try {
 			let loadedFeature = require('../features/' + feature + '.js');
+			if (!loadedFeature.class.isHidden && !this.featureNames.includes(feature)) this.featureNames.push(feature);
+
+			if (!loadedFeature.class.isDefaultEnabled) return false;
 			this.features[feature] = loadedFeature;
 			loadedFeature.class.setId(feature);
-			// loadedFeature.class._initVariables(this);
-			if (loadedFeature.class.isDefaultEnabled) {
-				loadedFeature.class._onEnable(this);
-			}
+			loadedFeature.class._onEnable(this);
 			logger.info('■ Loaded feature ' + feature, 3);
 			return loadedFeature;
 		} catch (e) {
@@ -146,17 +181,22 @@ class FeatureManager {
 			throw e;
 		}
 	}
+
 	unloadAllFeatures() {
 		Object.keys(this.features).forEach((feature) => {
 			this.unloadFeature(feature);
 		});
 	}
 	unloadFeature(feature) {
-		if (!this.features[feature]) return;
+		if (!this.features[feature]) return false;
 		this.features[feature].class._onDisable();
 		delete this.features[feature];
 		logger.info('□ Unloaded feature ' + feature);
+		return true;
 	}
+	//
+
+	//
 	registerCommand(name, func, completions = undefined) {
 		let event = this.registerEvent('command', func, this);
 		if (completions) event.trigger.setTabCompletions(completions || []);
@@ -200,11 +240,15 @@ class FeatureManager {
 			id,
 			type,
 			register: () => {
-				this.events[id].trigger.register();
+				if (this.events[id] && !this.events[id].isRegistered()) {
+					this.events[id].trigger.register();
+				}
 				return this.events[id];
 			},
 			unregister: () => {
-				this.events[id].trigger.unregister();
+				if (this.events[id] && this.events[id].isRegistered()) {
+					this.events[id].trigger.unregister();
+				}
 				return this.events[id];
 			},
 			isRegistered: () => {
