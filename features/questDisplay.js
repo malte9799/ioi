@@ -1,10 +1,9 @@
 /// <reference types="../../CTAutocomplete" />
 /// <reference lib="es2015" />
-import Feature from '../class/Feature';
-import logger from '../logger';
+import Feature from 'ioi/class/Feature';
 import PogObject from 'PogData';
-import db from '../db';
-import huds from '../huds';
+import db from 'ioi/db';
+import huds from 'ioi/huds';
 
 const Background = com.chattriggers.ctjs.api.render.Display.Background;
 const fishRarity = ['common', 'uncommon', 'rare', 'epic', 'legendary', 'unique', 'ethereal', 'mythic', 'boss'];

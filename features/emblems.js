@@ -1,7 +1,7 @@
 /// <reference types="../../CTAutocomplete" />
 /// <reference lib="es2015" />
-import Feature from '../class/Feature';
-import TextLib from '../utils/TextLib';
+import Feature from 'ioi/class/Feature';
+import TextLib from 'ioi/utils/TextLib';
 
 class Emblems extends Feature {
 	constructor() {

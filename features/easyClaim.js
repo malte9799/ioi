@@ -1,8 +1,8 @@
 /// <reference types="../../CTAutocomplete" />
 /// <reference lib="es2015" />
-import Feature from '../class/Feature';
-import RenderLib2d from '../utils/RenderLib2d';
-import RendererUtils, { Align } from '../utils/RendererUtils';
+import Feature from 'ioi/class/Feature';
+import RenderLib2d from 'ioi/utils/RenderLib2d';
+import RendererUtils, { Align } from 'ioi/utils/RendererUtils';
 
 class EasyClaim extends Feature {
 	constructor() {

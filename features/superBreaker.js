@@ -1,7 +1,7 @@
 /// <reference types="../../CTAutocomplete" />
 /// <reference lib="es2015" />
-import Feature from '../class/Feature';
-import logger from '../logger';
+import Feature from 'ioi/class/Feature';
+import logger from 'ioi/logger';
 
 class SuperBreaker extends Feature {
 	constructor() {

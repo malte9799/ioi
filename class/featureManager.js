@@ -104,6 +104,9 @@ class FeatureManager {
 				loadedFeatures.set(feature, true);
 			}).start();
 		});
+		while (this.enabled && [...loadedFeatures.values()].some((a) => !a)) {
+			Thread.sleep(100);
+		}
 	}
 	loadFeature(feature) {
 		if (this.features[feature]) return false;

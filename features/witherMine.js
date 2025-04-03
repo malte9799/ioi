@@ -1,6 +1,6 @@
 /// <reference types="../../CTAutocomplete" />
 /// <reference lib="es2015" />
-import Feature from '../class/Feature';
+import Feature from 'ioi/class/Feature';
 
 const HOE = new Item(new ItemType('minecraft:sponge'));
 const SHOVEL = new Item(new ItemType('minecraft:soul_sand'));
