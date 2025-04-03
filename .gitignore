@@ -1,6 +1,7 @@
 **.data.json
 features/dev/
-**.ts
-data/items
 docs/
-installer.*
+*.log
+\!*.txt
+ioi.zip
+.vscode

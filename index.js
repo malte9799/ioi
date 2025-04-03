@@ -1,6 +1,13 @@
 /// <reference types="../CTAutocomplete" />
 /// <reference lib="es2015" />
 
+if (!global.ioi) global.ioi = {};
+
+import * as Updater from './updater';
+import tabcompletion from './utils/tabcompletion';
+import metadata from './metadata';
+import logger from './logger';
+
 //#region Mixins
 import { onBlockBreak, onBlockPlace, onPreBlockPlace } from './mixins.js';
 const onBlockBreakTrigger = createCustomTrigger('blockBreak');
@@ -23,7 +30,45 @@ onBlockPlace.attach((instance, cir, itemPlacementContext) => {
 });
 //#endregion
 
-if (!global.ioi) global.ioi = {};
+const log = (...args) => ChatLib.chat('§7[§6ioi§7]§r ' + args.join(' '));
+
+function tryUpdate(delay = 0) {
+	try {
+		const meta = Updater.loadMeta();
+		const version = Updater.getVersion(meta);
+		if (Updater.compareVersions(version, metadata.version) <= 0) return -1; // Already up to date
+		if (delay > 0) Thread.sleep(delay);
+		const url = Updater.getAssetURL(meta);
+		try {
+			Updater.downloadUpdate(url);
+		} catch (e) {
+			if (logger.isDev) log('failed to download update:', e, e.stack);
+			else log('failed to download update');
+			console.log(e + '\n' + e.stack);
+			new TextComponent({ text: ChatLib.getCenteredText('&nClick to Manually Update'), clickEvent: { action: 'open_url', value: `https://github.com/${metadata.creator}/${metadata.name}/releases/latest` } }).chat();
+
+			return 1;
+		}
+
+		// TODO: Better Chat Messages!
+		log('Update Found!');
+		new TextComponent({ text: ChatLib.getCenteredText('Click to View on Github'), clickEvent: { action: 'open_url', value: `https://github.com/${metadata.creator}/${metadata.name}/releases/latest` } }).chat();
+		new TextComponent({ text: ChatLib.getCenteredText('Click to Print Changelog'), clickEvent: { action: 'run_command', value: `/${metadata.name} viewChangelog` } }).chat();
+		log(ChatLib.getCenteredText(`§4${metadata.version} -> ${version}`));
+		log('');
+		if (!logger.isDev) log(ChatLib.getCenteredText('§c§lNote: Your CT Modules will be reloaded.'));
+		else log(ChatLib.getCenteredText('§c§lNote: IOI will be reloaded'));
+		new TextComponent(new TextComponent({ text: '§a[UPDATE]', clickEvent: { action: 'run_command', value: `/${metadata.name} update accept` } }), new TextComponent({ text: '§4[CANCLE]', clickEvent: { action: 'run_command', value: `/${metadata.name} update deny` } })).chat();
+
+		return 0;
+	} catch (e) {
+		if (logger.isDev) log('failed to fetch update:', e, e.stack);
+		else log('failed to fetch update');
+		console.log(e + '\n' + e.stack);
+	}
+	return -1;
+}
+
 class TrappedIoI {
 	constructor() {
 		this.FeatureManager = require('./class/FeatureManager.js');
@@ -32,12 +77,20 @@ class TrappedIoI {
 }
 
 let main = register('worldLoad', () => {
+	main.unregister();
+
+	new Thread(() => {
+		Thread.sleep(1000);
+		if (tryUpdate(1000) !== -1) {
+		} else loadMain();
+	}).start();
+});
+
+function loadMain() {
 	new TrappedIoI();
 	new Sound({ source: 'ui.loom.select_pattern', category: Sound.Category.MASTER, pitch: 1.5, volume: 0.4 }).play();
 	new Sound({ source: 'ui.toast.in', category: Sound.Category.MASTER, pitch: 1.5, volume: 2 }).play();
-
-	main.unregister();
-});
+}
 
 //#region DEBUG
 const mapping = [
