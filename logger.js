@@ -9,7 +9,7 @@ class Logger {
 		this.loglevel = this.isDev ? 3 : 2; //0=none, 1=error, 2=warn, 3=info, 4=debug
 		this.logToMcChat = false;
 		this.logPrefixes = ['[ioi]       ', '[ioi:ERROR] ', '[ioi:WARN]  ', '[ioi:INFO]  ', '[ioi:DEBUG] '];
-		this.chatPrefix = '&6[ioi]&7 ';
+		this.chatPrefix = '&7[&6ioi&7]&r ';
 		this.info('Logger initialised');
 	}
 
