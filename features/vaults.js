@@ -1,7 +1,7 @@
 /// <reference types="../../CTAutocomplete" />
 /// <reference lib="es2015" />
-import Feature from 'ioi/class/Feature';
-import RenderLib2d from 'ioi/utils/RenderLib2d';
+import Feature from '../class/Feature';
+import RenderLib2d from '../utils/RenderLib2d';
 
 const ITEM = new Item(new ItemType('minecraft:dirt'));
 

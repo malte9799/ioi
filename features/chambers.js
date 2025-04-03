@@ -1,7 +1,7 @@
 /// <reference types="../../CTAutocomplete" />
 /// <reference lib="es2015" />
-import Feature from 'ioi/class/Feature';
-import logger from 'ioi/logger';
+import Feature from '../class/Feature';
+import logger from '../logger';
 
 class Chambers extends Feature {
 	constructor() {

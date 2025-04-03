@@ -1,8 +1,8 @@
-import NonPooledThread from 'ioi/utils/nonPooledThread.js';
-import metadata from 'ioi/metadata.js';
-import logger from 'ioi/logger.js';
-import huds from 'ioi/huds.js';
-import tabcompletion from 'ioi/utils/tabcompletion.js';
+import NonPooledThread from '../utils/nonPooledThread.js';
+import metadata from '../metadata.js';
+import logger from '../logger.js';
+import huds from '../huds.js';
+import tabcompletion from '../utils/tabcompletion.js';
 // import settings from '../settings.js';
 
 const File = Java.type('java.io.File');

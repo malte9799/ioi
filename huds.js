@@ -1,8 +1,6 @@
-import db from 'ioi/db';
-import RenderLib2d from 'ioi/utils/RenderLib2d';
-import { OutlineMode } from 'ioi/utils/RendererUtils';
+import db from './db';
 
-// Copy of Krun but Updated to 1.21.4
+// Copy of Krun and Updated to 1.21.4 [https://github.com/DocilElm/Krun]
 const drawCentered = (str, yPadding = 0) => {
 	Renderer.drawStringWithShadow(str, (Renderer.screen.getWidth() - Renderer.getStringWidth(str.removeFormatting())) / 2, Renderer.screen.getHeight() / 2 + yPadding);
 };
@@ -354,7 +352,6 @@ if (!global.ioi.huds) {
 	global.ioi.huds = huds;
 
 	register('gameUnload', () => {
-		if (!global.ioi.huds) return;
 		global.ioi.huds.save();
 		global.ioi.huds = undefined;
 	});

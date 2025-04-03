@@ -1,5 +1,5 @@
-import logger from 'ioi/logger';
-import metadata from 'ioi/metadata';
+import logger from './logger';
+import metadata from './metadata';
 
 // prettier-ignore
 import {

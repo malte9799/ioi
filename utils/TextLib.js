@@ -1,7 +1,7 @@
 /// <reference types="../../CTAutocomplete" />
 /// <reference lib="es2015" />
 
-import TextComponent_ from 'ioi/wrapped/TextComponent';
+import TextComponent_ from '../wrapped/TextComponent';
 const Color = java.awt.Color;
 
 export default class TextLib {

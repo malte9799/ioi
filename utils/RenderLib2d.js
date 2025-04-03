@@ -1,7 +1,7 @@
 /// <reference types="../../CTAutocomplete" />
 /// <reference lib="es2015" />
 
-import RendererUtils, { Align, OutlineMode } from 'ioi/utils/RendererUtils';
+import RendererUtils, { Align, OutlineMode } from './RendererUtils';
 
 const TextLayerType = net.minecraft.client.font.TextRenderer.class_6415; // class_6415: TextLayerType
 const VertexConsumers = Client.getMinecraft().getBufferBuilders().getEntityVertexConsumers();

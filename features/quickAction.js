@@ -1,6 +1,6 @@
 /// <reference types="../../CTAutocomplete" />
 /// <reference lib="es2015" />
-import Feature from 'ioi/class/Feature';
+import Feature from '../class/Feature';
 
 const quickActionKey = new KeyBind('Quick Action', Keyboard.KEY_R, 'TrappedIoI');
 
