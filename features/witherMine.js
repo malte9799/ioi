@@ -26,6 +26,8 @@ class WitherMine extends Feature {
 			if (item.includes('_shovel')) SHOVEL.draw(x, y, 2);
 			if (item.includes('_axe')) AXE.draw(x, y, 2);
 		});
+
+		this.registerSoundPlay('minecraft:block.note_block.snare', (pos, name, volume, pitch, category, event) => {});
 	}
 
 	onDisable() {}
