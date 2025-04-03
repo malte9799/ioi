@@ -7,6 +7,9 @@ import * as Updater from './updater';
 import tabcompletion from './utils/tabcompletion';
 import metadata from './metadata';
 import logger from './logger';
+import huds from './huds';
+
+import FeatureManager from './class/FeatureManager.js';
 
 //#region Mixins
 import { onBlockBreak, onBlockPlace, onPreBlockPlace } from './mixins.js';
@@ -30,7 +33,103 @@ onBlockPlace.attach((instance, cir, itemPlacementContext) => {
 });
 //#endregion
 
-const log = (...args) => ChatLib.chat('§7[§6ioi§7]§r ' + args.join(' '));
+const log = (...args) => ChatLib.chat(logger.chatPrefix + args.join(' '));
+
+let main = register('worldLoad', () => {
+	main.unregister();
+
+	new Thread(() => {
+		Thread.sleep(1000);
+		if (tryUpdate(1000) !== -1) {
+		} else {
+			FeatureManager.loadMain();
+			new Sound({ source: 'ui.loom.select_pattern', category: Sound.Category.MASTER, pitch: 1.5, volume: 0.4 }).play();
+			new Sound({ source: 'ui.toast.in', category: Sound.Category.MASTER, pitch: 1.5, volume: 2 }).play();
+		}
+	}).start();
+});
+
+register('command', (...args) => {
+	switch (args[0]) {
+		case 'load':
+			FeatureManager.loadMain();
+			break;
+
+		case 'unload':
+			FeatureManager.unloadMain();
+			break;
+
+		case 'reload':
+			FeatureManager.unloadMain();
+			FeatureManager.loadMain();
+			break;
+
+		case 'editHud':
+			huds.open();
+			break;
+
+		case 'update':
+			switch (args[1]) {
+				case 'accept':
+					Updater.applyUpdate();
+					ChatLib.command('ct load');
+					// isDev ? ChatLib.command('ioi reload') : ChatLib.command('ct load');
+					break;
+				case 'deny':
+					Updater.deleteDownload();
+					break;
+				default:
+					new Thread(() => {
+						if (tryUpdate() === -1) log('You are up to date!');
+					}).start();
+					break;
+			}
+			break;
+
+		case 'features':
+			const feat = args[2];
+			if (!feat) args[1] = '';
+			switch (args[1]) {
+				case 'load':
+					new Thread(() => {
+						if (FeatureManager.loadFeature(feat)) logger.chat('Feature loaded: §r' + feat);
+					}).start();
+					break;
+				case 'unload':
+					if (FeatureManager.unloadFeature(feat)) logger.chat('Feature unloaded: §r' + feat);
+					break;
+				case 'reload':
+					new Thread(() => {
+						this.unloadFeature(feat);
+						if (this.loadFeature(feat)) logger.chat('Feature reloaded: §r' + feat);
+					}).start();
+					break;
+				case 'list':
+				default:
+					logger.chat('Feature list:');
+					FeatureManager.featureFiles.forEach((e) => {
+						const status = FeatureManager.features[e] ? '§a§l✔' : '§c§l✘';
+						logger.chat(status + '§r ' + e);
+					});
+					break;
+			}
+	}
+})
+	.setTabCompletions(
+		tabcompletion({
+			reload: [],
+			unload: [],
+			features: {
+				load: () => FeatureManager.featureFiles.filter((e) => !FeatureManager.features[e]),
+				unload: () => FeatureManager.featureFiles.filter((e) => FeatureManager.features[e]),
+				reload: () => FeatureManager.featureFiles.filter((e) => FeatureManager.features[e]),
+				list: [],
+			},
+			editHud: [],
+			update: [],
+		})
+	)
+	.setName(metadata.name);
 
 function tryUpdate(delay = 0) {
 	try {
@@ -67,29 +166,6 @@ function tryUpdate(delay = 0) {
 		console.log(e + '\n' + e.stack);
 	}
 	return -1;
-}
-
-class TrappedIoI {
-	constructor() {
-		this.FeatureManager = require('./class/FeatureManager.js');
-		this.FeatureManager.parent = this;
-	}
-}
-
-let main = register('worldLoad', () => {
-	main.unregister();
-
-	new Thread(() => {
-		Thread.sleep(1000);
-		if (tryUpdate(1000) !== -1) {
-		} else loadMain();
-	}).start();
-});
-
-function loadMain() {
-	new TrappedIoI();
-	new Sound({ source: 'ui.loom.select_pattern', category: Sound.Category.MASTER, pitch: 1.5, volume: 0.4 }).play();
-	new Sound({ source: 'ui.toast.in', category: Sound.Category.MASTER, pitch: 1.5, volume: 2 }).play();
 }
 
 //#region DEBUG

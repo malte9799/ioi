@@ -9,12 +9,10 @@ const File = Java.type('java.io.File');
 
 class FeatureManager {
 	constructor() {
-		this.parent = undefined;
-		this.enabled = true;
-		this.messagePrefix = logger.chatPrefix || '&6[ioi]&7 ';
+		this.enabled = false;
 		this.isDev = logger.isDev;
 
-		this.featureNames = [];
+		this.featureFiles = [];
 		this.features = {};
 		this.events = {};
 		this.lastEventId = 0;
@@ -23,91 +21,9 @@ class FeatureManager {
 
 		this.longEventTime = 20;
 
-		new NonPooledThread(() => {
-			this.loadMain();
-		}).start();
-
 		this.registerEvent('gameUnload', () => {
 			this.unloadMain();
 		});
-
-		this.registerCommand(
-			'ioi',
-			(...args) => {
-				switch (args[0]) {
-					case 'load':
-						new NonPooledThread(() => {
-							this.loadMain();
-						}).start();
-						break;
-
-					case 'unload':
-						new NonPooledThread(() => {
-							this.unloadMain();
-						}).start();
-						break;
-
-					case 'reload':
-						new NonPooledThread(() => {
-							this.unloadMain();
-							this.loadMain();
-						}).start();
-						break;
-
-					case 'editHud':
-						huds.open();
-						break;
-
-					case 'feature':
-						const feat = args[2];
-						if (!feat) args[1] = '';
-						switch (args[1]) {
-							case 'load':
-								new Thread(() => {
-									if (this.loadFeature(feat)) logger.chat('Feature loaded: §r' + feat);
-								}).start();
-								break;
-
-							case 'unload':
-								new Thread(() => {
-									if (this.unloadFeature(feat)) logger.chat('Feature loaded: §r' + feat);
-								}).start();
-								break;
-
-							case 'reload':
-								new Thread(() => {
-									this.unloadFeature(feat);
-									if (this.loadFeature(feat)) logger.chat('Feature reloaded: §r' + feat);
-								}).start();
-								break;
-
-							default:
-								logger.chat('Feature list:');
-								this.featureNames.forEach((e) => {
-									const status = this.features[e] ? '§a§l✔' : '§c§l✘';
-									logger.chat(status + '§r ' + e);
-								});
-								break;
-						}
-						break;
-					default:
-						logger.chat('help');
-						break;
-				}
-			},
-			tabcompletion({
-				load: [],
-				unload: [],
-				reload: [],
-				feature: {
-					load: () => this.featureNames.filter((e) => !this.features[e]),
-					unload: () => this.featureNames.filter((e) => this.features[e]),
-					reload: () => this.featureNames.filter((e) => this.features[e]),
-					list: [],
-				},
-				editHud: [],
-			})
-		);
 
 		this.registerCommand('ctLoad', () => {
 			new Thread(() => {
@@ -128,30 +44,59 @@ class FeatureManager {
 	}
 
 	loadMain() {
-		// this.enabled = true;
-		let startLoading = Date.now();
-		this.loadAllFeatures();
-		logger.chat('Loaded!');
-		logger.info('TrappedIoI took ' + ((Date.now() - startLoading) / 1000).toFixed(2) + 's to load');
+		new NonPooledThread(() => {
+			this.enabled = true;
+			let startLoading = Date.now();
+			this.loadAllFeatures();
+			logger.chat('Loaded!');
+			logger.info('TrappedIoI took ' + ((Date.now() - startLoading) / 1000).toFixed(2) + 's to load');
+		}).start();
 	}
 	unloadMain() {
-		// this.enabled = false;
+		this.enabled = false;
 		this.unloadAllFeatures();
 	}
 
-	loadAllFeatures() {
-		this.featureNames = [];
-		let featuresDir = new File('./config/ChatTriggers/modules/' + metadata.name + '/features');
-		let devFeaturesDir = new File('./config/ChatTriggers/modules/' + metadata.name + '/features/dev');
+	getAllFeatureFiles(directory) {
+		const dir = new java.io.File(directory);
+		const result = [];
 
+		if (!dir.exists() || !dir.isDirectory()) {
+			return result;
+		}
+
+		function traverseDirectory(folder, parentPath = '') {
+			const files = folder.listFiles();
+
+			if (files == null) return;
+
+			for (let i = 0; i < files.length; i++) {
+				const file = files[i];
+				const fileName = file.getName();
+
+				const filePath = parentPath.length > 0 ? parentPath + '/' + fileName : fileName;
+
+				if (file.isDirectory()) {
+					traverseDirectory(file, filePath);
+				} else {
+					if (fileName.endsWith('.js')) {
+						result.push(filePath.slice(0, -3));
+					}
+				}
+			}
+		}
+
+		traverseDirectory(dir);
+		return result;
+	}
+
+	loadAllFeatures() {
 		let loadedFeatures = new Map();
+		this.featureFiles = this.getAllFeatureFiles('./config/ChatTriggers/modules/' + metadata.name + '/features');
 		new Thread(() => {
 			this.dataLoader = this.loadFeature('dataLoader').class;
 		}).start();
-		const features = [...featuresDir.list(), ...devFeaturesDir.list().map((e) => 'dev/' + e)];
-		features.forEach((fileName) => {
-			if (!fileName.includes('.js')) return;
-			let feature = fileName.split('.')[0];
+		this.featureFiles.forEach((feature) => {
 			if (feature == 'dataLoader') return;
 			loadedFeatures.set(feature, false);
 			new Thread(() => {
@@ -161,12 +106,9 @@ class FeatureManager {
 		});
 	}
 	loadFeature(feature) {
-		feature = feature.replace('.js', '');
 		if (this.features[feature]) return false;
 		try {
 			let loadedFeature = require('../features/' + feature + '.js');
-			if (!loadedFeature.class.isHidden && !this.featureNames.includes(feature)) this.featureNames.push(feature);
-
 			if (!loadedFeature.class.isDefaultEnabled) return false;
 			this.features[feature] = loadedFeature;
 			loadedFeature.class.setId(feature);
@@ -222,11 +164,11 @@ class FeatureManager {
 					} else {
 						if (this.enabled) {
 							let feature = context.getId();
-							new TextComponent(this.messagePrefix + 'Feature not enabled! ', {
+							new TextComponent(logger.chatPrefix + 'Feature not enabled! ', {
 								text: '[enable]',
 								color: 'yellow',
 								hoverEvent: { action: 'show_text', value: '§aClick to enable "' + feature + '"' },
-								clickEvent: { action: 'run_command', value: `/soopyloadfeature ${feature}` },
+								clickEvent: { action: 'run_command', value: `/ioi features load ${feature}` },
 							}).chat();
 						}
 					}
