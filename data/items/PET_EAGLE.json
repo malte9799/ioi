@@ -1,0 +1,7 @@
+{
+	"itemid": "minecraft_player_head",
+	"displayname": "§#74A7E6Common Eagle",
+	"nbt": "",
+	"lore": ["§#74A7E6Common Eagle", "§8ᴍɪɴɪɴɢ ᴘᴇᴛ", "§f", "§#74A7E6§l▎§#74A7E6 Level: §f1", "§#74A7E6§l▎§#74A7E6 Experience: §f0 §7(0.0%)", "§f", "§#74A7E6mcMMO Boost §7(Passive)", "§7Increases §fexperience §7earned by §f0.327%"],
+	"internalname": "EMBLEM_HASTE_1"
+}
