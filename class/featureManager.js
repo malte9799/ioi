@@ -156,6 +156,7 @@ class FeatureManager {
 			func,
 			context,
 			trigger: register(type, (...args) => {
+				if (!this.enabled) return;
 				try {
 					if (context.enabled) {
 						let start = Date.now();
@@ -165,15 +166,13 @@ class FeatureManager {
 							logger.warn('Long event triggered [' + time + 'ms] (' + context.getId() + '/' + type + ')', 3);
 						}
 					} else {
-						if (this.enabled) {
-							let feature = context.getId();
-							new TextComponent(logger.chatPrefix + 'Feature not enabled! ', {
-								text: '[enable]',
-								color: 'yellow',
-								hoverEvent: { action: 'show_text', value: '§aClick to enable "' + feature + '"' },
-								clickEvent: { action: 'run_command', value: `/ioi features load ${feature}` },
-							}).chat();
-						}
+						let feature = context.getId();
+						new TextComponent(logger.chatPrefix + 'Feature not enabled! ', {
+							text: '[enable]',
+							color: 'yellow',
+							hoverEvent: { action: 'show_text', value: '§aClick to enable "' + feature + '"' },
+							clickEvent: { action: 'run_command', value: `/ioi features load ${feature}` },
+						}).chat();
 					}
 				} catch (e) {
 					logger.error(`Error in ${type} event:`);
