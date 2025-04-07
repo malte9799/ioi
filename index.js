@@ -12,21 +12,21 @@ import huds from './huds';
 import FeatureManager from './class/FeatureManager.js';
 
 //#region Mixins
-import { onBlockBreak, onBlockPlace, onPreBlockPlace } from './mixins.js';
+import { ClientPlayerInteractionManager_breakBlock, BlockItem_place_head, BlockItem_place_tail, LivingEntity_addStatusEffect } from './mixins.js';
 const onBlockBreakTrigger = createCustomTrigger('blockBreak');
-const onBlockplaceTrigger = createCustomTrigger('blockPlace');
-onBlockBreak.attach((instance, cir, pos) => {
+ClientPlayerInteractionManager_breakBlock.attach((instance, cir, pos) => {
 	if (!World.isLoaded()) return;
 	const block = World.getBlockAt(new BlockPos(pos));
 	onBlockBreakTrigger.trigger(block);
 });
 
+const onBlockplaceTrigger = createCustomTrigger('blockPlace');
 let placedItem;
-onPreBlockPlace.attach((instance, cir, itemPlacementContext) => {
+BlockItem_place_head.attach((instance, cir, itemPlacementContext) => {
 	if (!World.isLoaded()) return;
 	placedItem = new Item(itemPlacementContext.getStack());
 });
-onBlockPlace.attach((instance, cir, itemPlacementContext) => {
+BlockItem_place_tail.attach((instance, cir, itemPlacementContext) => {
 	if (!World.isLoaded()) return;
 	const pos = itemPlacementContext.getBlockPos();
 	onBlockplaceTrigger.trigger(World.getBlockAt(new BlockPos(pos)), placedItem || new Item(itemPlacementContext.getStack()));
@@ -134,6 +134,10 @@ register('command', (...args) => {
 function tryUpdate(delay = 0) {
 	try {
 		const meta = Updater.loadMeta();
+		if (!meta) {
+			log('No release found!');
+			return -1;
+		}
 		const version = Updater.getVersion(meta);
 		if (Updater.compareVersions(version, metadata.version) <= 0) return -1; // Already up to date
 		if (delay > 0) Thread.sleep(delay);

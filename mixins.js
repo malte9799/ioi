@@ -10,7 +10,7 @@ IntPropertyMixin.widenField('min');
 IntPropertyMixin.widenField('max');
 
 const ClientPlayerInteractionManagerMixin = new Mixin('net.minecraft.client.network.ClientPlayerInteractionManager');
-export const onBlockBreak = ClientPlayerInteractionManagerMixin.inject({
+export const ClientPlayerInteractionManager_breakBlock = ClientPlayerInteractionManagerMixin.inject({
 	at: new At('HEAD'),
 	method: 'breakBlock',
 	locals: new Local({
@@ -20,7 +20,7 @@ export const onBlockBreak = ClientPlayerInteractionManagerMixin.inject({
 });
 
 const BlockItemMixin = new Mixin('net.minecraft.item.BlockItem');
-export const onPreBlockPlace = BlockItemMixin.inject({
+export const BlockItem_place_head = BlockItemMixin.inject({
 	at: new At('HEAD'),
 	method: 'place(Lnet/minecraft/item/ItemPlacementContext;)Lnet/minecraft/util/ActionResult;',
 	locals: new Local({
@@ -28,11 +28,35 @@ export const onPreBlockPlace = BlockItemMixin.inject({
 		index: 1,
 	}),
 });
-export const onBlockPlace = BlockItemMixin.inject({
+export const BlockItem_place_tail = BlockItemMixin.inject({
 	at: new At('TAIL'),
 	method: 'place(Lnet/minecraft/item/ItemPlacementContext;)Lnet/minecraft/util/ActionResult;',
 	locals: new Local({
 		type: 'Lnet/minecraft/item/ItemPlacementContext;',
+		index: 1,
+	}),
+});
+
+const LivingEntityMixin = new Mixin('net.minecraft.entity.LivingEntity');
+export const LivingEntity_addStatusEffect = LivingEntityMixin.inject({
+	method: 'addStatusEffect(Lnet/minecraft/entity/effect/StatusEffectInstance;Lnet/minecraft/entity/Entity;)Z',
+	at: new At('HEAD'),
+	locals: [
+		new Local({
+			type: 'Lnet/minecraft/entity/effect/StatusEffectInstance;',
+			index: 1,
+		}),
+		new Local({
+			type: 'Lnet/minecraft/entity/Entity;',
+			index: 2,
+		}),
+	],
+});
+export const LivingEntity_addStatusEffect2 = LivingEntityMixin.inject({
+	method: 'addStatusEffect(Lnet/minecraft/entity/effect/StatusEffectInstance;)Z',
+	at: new At('HEAD'),
+	locals: new Local({
+		type: 'Lnet/minecraft/entity/effect/StatusEffectInstance;',
 		index: 1,
 	}),
 });
