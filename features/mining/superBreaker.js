@@ -1,8 +1,10 @@
-/// <reference types="../../CTAutocomplete" />
+/// <reference types="../../../CTAutocomplete" />
 /// <reference lib="es2015" />
 import Feature from 'ioi/class/Feature';
 import logger from 'ioi/logger';
 
+// Displayes the Super Breaker cooldown on all Pickaxes
+// Also plays and 'alarm' sound when Super Breaker is ready to use
 class SuperBreaker extends Feature {
 	constructor() {
 		super();
@@ -35,24 +37,11 @@ class SuperBreaker extends Feature {
 		};
 	}
 
-	initSettings(Settings) {
-		this.Settings = Settings;
-		Settings.addProperty('SWITCH', {
-			name: 'Cooldown Display',
-			descrption: 'Displayes an cooldown (like on enderpearls) on all pickaxes while SuperBreaker is charging.',
-			category: 'Mining',
-			subcategory: '',
-		});
-		Settings.addProperty('SWITCH', {
-			name: "'worn off' Sound",
-			descrption: 'Plays a sound when Super Breaker wears off.',
-			category: 'Mining',
-			subcategory: '',
-		});
-	}
+	initSettings(Settings) {}
 
 	onEnable() {
 		this.alert = this.registerStep(false, 2, () => {
+			if (!Player.getHeldItem()?.getType()?.getRegistryName()?.includes('_pickaxe')) return;
 			// if (Client.getMinecraft().isWindowFocused())
 			new Sound({ source: 'minecraft:item.trident.riptide_3', category: Sound.Category.MASTER, volume: 0.25, pitch: 1 }).play();
 		}).unregister();
@@ -93,7 +82,7 @@ class SuperBreaker extends Feature {
 			}
 		});
 		this.registerChat('You are too tired to use that ability again. (${sec}s)', (sec, event) => {
-			if (this.hasCooldown()) return;
+			if (this.hasCooldown() || !Player.getHeldItem()?.getType()?.getRegistryName()?.includes('_pickaxe')) return;
 			this.setCooldown(sec);
 		});
 		this.registerChat('Mine ${mine} resetting in ${sec} seconds', (mine, sec, _, event) => {
