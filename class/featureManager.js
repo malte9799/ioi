@@ -15,6 +15,7 @@ class FeatureManager {
 		this.featureFiles = [];
 		this.features = {};
 		this.events = {};
+		this.dynamicEvents = {};
 		this.lastEventId = 0;
 
 		// this.Settings = settings;
@@ -24,7 +25,6 @@ class FeatureManager {
 		this.registerEvent('gameUnload', () => {
 			this.unloadMain();
 		});
-
 		this.registerCommand('ctLoad', () => {
 			new Thread(() => {
 				this.unloadMain();
@@ -37,6 +37,13 @@ class FeatureManager {
 				ChatLib.command('ct unload');
 			}).start();
 		});
+
+		this.registerEvent('step', () => {
+			Object.entries(this.dynamicEvents).forEach(([id, func]) => {
+				if (func()) this.events[id].register();
+				else this.events[id].unregister();
+			});
+		}).trigger.setDelay(5);
 	}
 
 	getId() {
@@ -108,11 +115,11 @@ class FeatureManager {
 			Thread.sleep(100);
 		}
 	}
-	loadFeature(feature) {
+	loadFeature(feature, force = false) {
 		if (this.features[feature]) return false;
 		try {
 			let loadedFeature = require('../features/' + feature + '.js');
-			if (!loadedFeature.class.isDefaultEnabled) return false;
+			if (!force && !loadedFeature.class.isDefaultEnabled) return false;
 			this.features[feature] = loadedFeature;
 			loadedFeature.class.setId(feature);
 			loadedFeature.class._onEnable(this);
@@ -197,6 +204,11 @@ class FeatureManager {
 			},
 			isRegistered: () => {
 				return this.events[id].trigger.isRegistered();
+			},
+			when: (func) => {
+				if (!func()) this.events[id].unregister();
+				this.dynamicEvents[id] = func;
+				return this.events[id];
 			},
 		};
 
