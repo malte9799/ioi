@@ -9,7 +9,7 @@ if (!global.ioi.db) {
 	register('gameUnload', () => {
 		global.ioi.db.save();
 		global.ioi.db = undefined;
-	}).setPriority(Priority.LOWEST);
+	});
 }
 
 export default global.ioi.db;
