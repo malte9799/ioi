@@ -92,7 +92,7 @@ register('command', (...args) => {
 			switch (args[1]) {
 				case 'load':
 					new Thread(() => {
-						if (FeatureManager.loadFeature(feat)) logger.chat('Feature loaded: §r' + feat);
+						if (FeatureManager.loadFeature(feat, true)) logger.chat('Feature loaded: §r' + feat);
 					}).start();
 					break;
 				case 'unload':
@@ -100,8 +100,8 @@ register('command', (...args) => {
 					break;
 				case 'reload':
 					new Thread(() => {
-						this.unloadFeature(feat);
-						if (this.loadFeature(feat)) logger.chat('Feature reloaded: §r' + feat);
+						FeatureManager.unloadFeature(feat);
+						if (FeatureManager.loadFeature(feat, true)) logger.chat('Feature reloaded: §r' + feat);
 					}).start();
 					break;
 				case 'list':
