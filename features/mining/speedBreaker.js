@@ -10,7 +10,7 @@ class SpeedBreaker extends Feature {
 	constructor() {
 		super();
 
-		this.isDefaultEnabled = true;
+		this.isDefaultEnabled = false;
 	}
 
 	initSettings(Settings) {}
@@ -19,6 +19,15 @@ class SpeedBreaker extends Feature {
 		this.registerPacketReceived(EntityStatusEffectS2CPacket, (packet, event) => {
 			if (packet.getEffectId().getIdAsString() != 'minecraft:haste' || packet.getDuration() == -1) return;
 			if (BossBars.getBossBars().some((e) => e.getName().includes('Haste'))) return;
+
+			const effiLevel = Player.getHeldItem()
+				.getEnchantments()
+				.entrySet()
+				.stream()
+				.filter((e) => e.toString().includes('efficiency'))
+				.findFirst()
+				.orElse({ value: 0 }).value;
+			if (effiLevel > 5) return;
 
 			new Sound({ source: 'minecraft:block.beacon.activate', pitch: 2 }).play();
 			setTimeout(() => {
