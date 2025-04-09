@@ -354,7 +354,7 @@ if (!global.ioi.huds) {
 	register('gameUnload', () => {
 		global.ioi.huds.save();
 		global.ioi.huds = undefined;
-	});
+	}).setPriority(Priority.HIGHEST);
 }
 
 export default global.ioi.huds;
