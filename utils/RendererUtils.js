@@ -6,7 +6,7 @@ const RenderSystem = Java.type('com.mojang.blaze3d.systems.RenderSystem');
 export default class RendererUtils {
 	static getSlotPos(slotIndex) {
 		const screen = Player.getContainer().screen;
-		if (!(screen instanceof net.minecraft.client.gui.screen.ingame.HandledScreen)) return;
+		if (!screen || !(screen instanceof net.minecraft.client.gui.screen.ingame.HandledScreen)) new Vec3i(0, 0, 0);
 		const slot = screen.getScreenHandler().slots.get(slotIndex);
 		return new Vec3i(screen.x + slot.x, screen.y + slot.y, 0);
 	}
