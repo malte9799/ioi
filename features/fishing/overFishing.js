@@ -57,6 +57,7 @@ class OverFishing extends Feature {
 		});
 		// TODO: unregister whenever postRenderWorld when possible
 		this.registerEvent('postRenderWorld', () => {
+			if (this.counter <= 1) return;
 			if (!this.lastBox) return;
 			const lineWidth = Math.min(this.counter, 3);
 			const color = this.counter == 1 ? Renderer.getColor(255, 255, 255, 150) : this.counter == 2 ? Renderer.getColor(254, 254, 63, 200) : Renderer.getColor(254, 63, 63, 250);
