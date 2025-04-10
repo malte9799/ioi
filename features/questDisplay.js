@@ -75,7 +75,7 @@ class QuestDisplay extends Feature {
 
 		this.registerEvent('guiOpened', (gui, event) => {
 			if (gui.getTitle().getString() !== 'Active Quests') return;
-			// this.DB.quests = {};
+			this.DB.quests = {};
 			let quests = [];
 			Client.scheduleTask(1, () => {
 				const items = Player.getContainer().getItems().slice(28, 44);
@@ -203,7 +203,7 @@ class QuestDisplay extends Feature {
 				}
 
 				if (/Catch [\d,]* Fish/.test(o)) {
-					this.registerChat('| FISH | You caught a ${size}cm Fish', () => {
+					this.registerChat('| FISH | You caught a ${size}cm ${_}!', () => {
 						this.DB.quests[questName].progress++;
 					});
 				}
