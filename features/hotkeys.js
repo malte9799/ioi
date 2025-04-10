@@ -27,7 +27,7 @@ class HotKeys extends Feature {
 			(...args) => {
 				switch (args[0]) {
 					case 'add':
-						this.add(0, args.slice(1).join(' '));
+						this.add(Keyboard.KEY_NONE, args.slice(1).join(' '));
 						break;
 					case 'remove':
 						this.remove(args.slice(1).join(' '));
