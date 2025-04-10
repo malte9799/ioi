@@ -58,6 +58,7 @@ class QuestDisplay extends Feature {
 		this.loadQuestTriggers();
 
 		this.registerEvent('renderOverlay', () => {
+			if (Client.isInChat()) return;
 			Object.entries(this.DB.quests)
 				.map(([questName, quest]) => {
 					const percent = Math.round((quest.progress / quest.goal) * 10000) / 100;
