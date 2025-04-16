@@ -157,6 +157,7 @@ class SettingsClass {
 		 * @param {String} type Type of the Property [SWITCH | CHECKBOX | TEXT | PARAGRAPH | SELECTOR | NUMBER | SLIDER | PERCENT_SLIDER | DECIMAL_SLIDER | COLOR | BUTTON | CUSTOM]
 		 * @param {Object} propData Property Data
 		 * @param {String} propData[].name Name
+		 * @param {String} propData[].displayName when preset will overwrite the name. name is used internally
 		 * @param {String} propData[].description Description
 		 * @param {String} propData[].category Category Name
 		 * @param {String} propData[].subcategory Subcategory Name
@@ -178,12 +179,19 @@ class SettingsClass {
 		 */
 		this.addProperty = (type, propData = {}, dependency = undefined) => {
 			propData.type = type;
+            const name = propData.name
+            propData.category = formatName(propData.category)
+            propData.subcategory = formatName(propData.subcategory)
+            if (!propData.displayName) propData.displayName = propData.name
 
-			if (this.propertys.hasOwnProperty(propData.name)) return;
-			this.propertys[propData.name] = propData;
+			if (this.propertys.hasOwnProperty(name)) return;
+            propData.propData = {}
+			this.propertys[name] = propData;
 			try {
-				const attributes = createPropertyAttributesExt(PropertyType[type], propData);
-				settingname = this.getSettingName(propData.name);
+                const propCopy = propData
+                propCopy.name = propCopy.displayName
+				const attributes = createPropertyAttributesExt(PropertyType[type], propCopy);
+				settingname = this.getSettingName(name);
 
 				let inputType = '';
 
@@ -233,17 +241,10 @@ class SettingsClass {
 				const action = type === 'BUTTON' ? new JavaAdapter(CallablePropertyValue, JSFunctionCallableValue(propData)) : new JavaAdapter(PropertyValue, JSBackedPropertyValue(this, settingname, inputType));
 
 				const data = new PropertyData(attributes, action, this.getConfig());
-				this.propertys[propData.name].propData = data;
+				this.propertys[name].propData = data;
 
 				this.registerProperty(data);
 
-				if (propData.category === 'Features') {
-					data.setCallbackConsumer(() => {
-						let name = data.attributesExt.name;
-						let featureName = name.charAt(0).toLowerCase() + name.slice(1).replaceAll(' ', '');
-						// this.featurManager.toggleFeature(featureName, !data.getAsBoolean());
-					});
-				}
 				if (dependency) {
 					if (dependency.includes(':')) {
 						// SELECTOR
@@ -264,10 +265,10 @@ class SettingsClass {
 					else {
 						if (Array.isArray(dependency)) {
 							dependency.forEach((d) => {
-								this.addDependency(propData.name, d);
+								this.addDependency(name, d);
 							});
 						} else {
-							this.addDependency(propData.name, dependency);
+							this.addDependency(name, dependency);
 						}
 					}
 				}
@@ -276,7 +277,6 @@ class SettingsClass {
 				logger.error('Error adding Property ' + propData.name);
 				logger.warn(JSON.stringify(e, undefined, 2));
 				logger.warn(e.stack);
-				Console.printStackTrace(e);
 				throw e;
 			}
 		};

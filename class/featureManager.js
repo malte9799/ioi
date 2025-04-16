@@ -119,7 +119,8 @@ class FeatureManager {
 			this.features[feature] = loadedFeature;
 			loadedFeature.class.setId(feature);
 			loadedFeature.class._initSettings(settings);
-			if (force || loadedFeature.class.isDefaultEnabled) this.enableFeature(feature);
+			loadedFeature.class.FeatureManager = this;
+			if (force || settings.getValue(feature + '_mainToggle')) this.enableFeature(feature);
 			logger.info('■ Loaded feature ' + feature, 3);
 			return loadedFeature;
 		} catch (e) {
@@ -146,12 +147,12 @@ class FeatureManager {
 
 	enableFeature(feature) {
 		if (!this.features[feature] || this.features[feature].class.enabled) return false;
-		this.features[feature].class._onEnable(this);
+		this.features[feature].class._onEnable();
 		return true;
 	}
 	disableFeature(feature) {
 		if (!this.features[feature] || !this.features[feature].class.enabled) return false;
-		this.features[feature].class._onDisable(this);
+		this.features[feature].class._onDisable();
 		return true;
 	}
 	//

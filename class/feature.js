@@ -8,6 +8,8 @@ export default class Feature {
 
 		this.id = undefined;
 
+		this.description = '';
+
 		this.enabled = false;
 		this.isDefaultEnabled = false;
 		this.isTogglable = true;
@@ -26,19 +28,28 @@ export default class Feature {
 	}
 
 	_initSettings(Settings) {
-		if (this.isTogglable && !this.isHidden) {
+		if (this.isTogglable) {
 			const [category, subcategory] = this.id.includes('/') ? this.id.split('/') : [this.id, ''];
 			Settings.addProperty('SWITCH', {
-				name: `Enabled ${subcategory ? subcategory : category}`,
-				descrption: '',
+				name: this.id + '_mainToggle',
+				displayName: subcategory ? subcategory : 'Enabled',
+				description: this.description,
 				category,
 				subcategory,
 				value: this.isDefaultEnabled,
+				hidden: this.isHidden,
+			}).setCallbackConsumer((value) => {
+				if (value) {
+					this._onEnable();
+				} else {
+					this._onDisable();
+				}
 			});
 		}
 		this.initSettings(Settings);
 	}
 	_onDisable() {
+		if (!this.enabled) return;
 		Object.values(this.events).forEach((e) => {
 			this.FeatureManager.unregisterEvent(e);
 		});
@@ -48,9 +59,9 @@ export default class Feature {
 		this.events = {};
 		this.enabled = false;
 	}
-	_onEnable(parent) {
-		this.FeatureManager = parent;
-		this.dataLoader = parent.dataLoader;
+	_onEnable() {
+		if (this.enabled) return;
+		this.dataLoader = this.FeatureManager.dataLoader;
 		this.enabled = true;
 
 		this.onEnable();
