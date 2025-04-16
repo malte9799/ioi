@@ -8,11 +8,12 @@ import tabcompletion from './utils/tabcompletion';
 import metadata from './metadata';
 import logger from './logger';
 import huds from './huds';
+import settings from './settings.js';
 
 import FeatureManager from './class/FeatureManager.js';
 
 //#region Mixins
-import { ClientPlayerInteractionManager_breakBlock, BlockItem_place_head, BlockItem_place_tail, LivingEntity_addStatusEffect } from './mixins.js';
+import { ClientPlayerInteractionManager_breakBlock, BlockItem_place_head, BlockItem_place_tail, MinecraftClient_hasOutline } from './mixins.js';
 const onBlockBreakTrigger = createCustomTrigger('blockBreak');
 ClientPlayerInteractionManager_breakBlock.attach((instance, cir, pos) => {
 	if (!World.isLoaded()) return;
@@ -31,6 +32,12 @@ BlockItem_place_tail.attach((instance, cir, itemPlacementContext) => {
 	const pos = itemPlacementContext.getBlockPos();
 	onBlockplaceTrigger.trigger(World.getBlockAt(new BlockPos(pos)), placedItem || new Item(itemPlacementContext.getStack()));
 });
+
+// const ItemEntity = net.minecraft.entity.ItemEntity;
+// MinecraftClient_hasOutline.attach((instance, cir, entity) => {
+// 	if (!entity instanceof ItemEntity) return;
+// 	cir.setReturnValue(true);
+// });
 //#endregion
 
 const log = (...args) => ChatLib.chat(logger.chatPrefix + args.join(' '));
@@ -86,17 +93,17 @@ register('command', (...args) => {
 			}
 			break;
 
-		case 'features':
+		case 'feature':
 			const feat = args[2];
 			if (!feat) args[1] = '';
 			switch (args[1]) {
-				case 'load':
+				case 'enable':
 					new Thread(() => {
-						if (FeatureManager.loadFeature(feat, true)) logger.chat('Feature loaded: §r' + feat);
+						if (FeatureManager.enableFeature(feat, true)) logger.chat('Feature loaded: §r' + feat);
 					}).start();
 					break;
-				case 'unload':
-					if (FeatureManager.unloadFeature(feat)) logger.chat('Feature unloaded: §r' + feat);
+				case 'disable':
+					if (FeatureManager.disableFeature(feat)) logger.chat('Feature unloaded: §r' + feat);
 					break;
 				case 'reload':
 					new Thread(() => {
@@ -107,26 +114,32 @@ register('command', (...args) => {
 				case 'list':
 				default:
 					logger.chat('Feature list:');
-					FeatureManager.featureFiles.forEach((e) => {
-						const status = FeatureManager.features[e] ? '§a§l✔' : '§c§l✘';
+					Onject.keys(FeatureManager.features).forEach((e) => {
+						const status = FeatureManager.features[e].enabled ? '§a§l✔' : '§c§l✘';
 						logger.chat(status + '§r ' + e);
 					});
 					break;
 			}
+			break;
+
+		case 'settings':
+			settings.openGUI();
+			break;
 	}
 })
 	.setTabCompletions(
 		tabcompletion({
 			reload: [],
 			unload: [],
-			features: {
-				load: () => FeatureManager.featureFiles.filter((e) => !FeatureManager.features[e]),
-				unload: () => FeatureManager.featureFiles.filter((e) => FeatureManager.features[e]),
-				reload: () => FeatureManager.featureFiles.filter((e) => FeatureManager.features[e]),
+			feature: {
+				enable: () => Object.keys(FeatureManager.features).filter((e) => !FeatureManager.features[e].class.enabled),
+				disable: () => Object.keys(FeatureManager.features).filter((e) => FeatureManager.features[e].class.enabled),
+				reload: () => Object.keys(FeatureManager.features).filter((e) => FeatureManager.features[e].class.enabled),
 				list: [],
 			},
 			editHud: [],
 			update: [],
+			settings: [],
 		})
 	)
 	.setName(metadata.name);
