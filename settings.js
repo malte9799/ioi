@@ -8,7 +8,7 @@ import {
   @Vigilant
 } from '../Vigilance';
 
-const PropertyData = Java.type("gg.essential.vigilance.data.PropertyData");
+const PropertyData = Java.type('gg.essential.vigilance.data.PropertyData');
 const PropertyType = Java.type('gg.essential.vigilance.data.PropertyType');
 const PropertyValue = Java.type('gg.essential.vigilance.data.PropertyValue');
 const CallablePropertyValue = Java.type('gg.essential.vigilance.data.CallablePropertyValue');
@@ -67,7 +67,7 @@ const JSBackedPropertyValue = (config, propName, type) => ({
 	},
 });
 
-@Vigilant(metadata.name, '§6TrappedIoI', {
+@Vigilant(metadata.name + '/data', '§6IoI', {
 	getCategoryComparator: () => (a, b) => {
 		const categories = ['array of your category names'];
 
@@ -114,14 +114,12 @@ class SettingsClass {
 
 		this.getSettingName = (propName) => {
 			let prop = this.getProp(propName);
-      if (!prop) return undefined;
-			return prop.category === 'Features'
-				? `${prop.name.toUpperCase().replaceAll(' ', '')}_mainToggle`
-				: `${prop.category.toUpperCase().replaceAll(' ', '')}_${prop.name.toLowerCase().replaceAll(' ', '_')}`;
+			if (!prop) return undefined;
+			return `${prop.category.toUpperCase().replaceAll(' ', '')}_${prop.name.toLowerCase().replaceAll(' ', '_')}`;
 		};
 		this.getValue = (propName) => {
 			let prop = this.getProp(propName);
-      if (!prop) return undefined;
+			if (!prop) return undefined;
 			let settingname = this.getSettingName(propName);
 			if (prop.type === 'COLOR') {
 				if (typeof this[settingname] === 'string') {
@@ -136,21 +134,21 @@ class SettingsClass {
 
 		this.editProperty = (propName, key, value) => {
 			let prop = this.getProp(propName);
-      if (!prop) return undefined;
+			if (!prop) return undefined;
 			let settingname = this.getSettingName(propName);
 
 			console.dir(this[settingname]);
 		};
 
-    this.getProp = (propName) => {  
-      let prop = this.propertys[propName];
+		this.getProp = (propName) => {
+			let prop = this.propertys[propName];
 			if (!prop) prop = this.propertys[formatName(propName)];
 			if (!prop) {
-        logger.error('Error getting Prop Value for ' + propName);
-        return undefined;
-      }
-      return prop;
-    }
+				logger.error('Error getting Prop Value for ' + propName);
+				return undefined;
+			}
+			return prop;
+		};
 
 		this.setCategoryOrder = (name, index) => {};
 
@@ -232,8 +230,7 @@ class SettingsClass {
 					this[settingname] = propData.value;
 				}
 
-				const action =
-					type === 'BUTTON' ? new JavaAdapter(CallablePropertyValue, JSFunctionCallableValue(propData)) : new JavaAdapter(PropertyValue, JSBackedPropertyValue(this, settingname, inputType));
+				const action = type === 'BUTTON' ? new JavaAdapter(CallablePropertyValue, JSFunctionCallableValue(propData)) : new JavaAdapter(PropertyValue, JSBackedPropertyValue(this, settingname, inputType));
 
 				const data = new PropertyData(attributes, action, this.getConfig());
 				this.propertys[propData.name].propData = data;
@@ -255,32 +252,32 @@ class SettingsClass {
 						this.customDependencys[parent] = {
 							propData: data,
 							value: dependency.split(':')[1],
-            };
-              // switchHelper}
-              // this.addDependency(propData.name, 'selector_dependendy '+ parent)
+						};
+						// switchHelper}
+						// this.addDependency(propData.name, 'selector_dependendy '+ parent)
 						this.registerListener(parent, (newValue) => {
 							let d = this.customDependencys[parent];
 							// d.switchHelper.setValue(this.propertys[parent].options[parseInt(newValue)] === d.value)
 							d.propData.attributesExt.hidden = this.propertys[parent].options[parseInt(newValue)] !== d.value;
 						});
 					} // SWITCH or CHECKBOX
-					else  {
-            if (Array.isArray(dependency)) {
-              dependency.forEach((d) => {
-                this.addDependency(propData.name, d);
-              });
-            } else {
-              this.addDependency(propData.name, dependency);
-            }
-          }
+					else {
+						if (Array.isArray(dependency)) {
+							dependency.forEach((d) => {
+								this.addDependency(propData.name, d);
+							});
+						} else {
+							this.addDependency(propData.name, dependency);
+						}
+					}
 				}
 				return data;
 			} catch (e) {
-                logger.error('Error adding Property ' + propData.name);
-                logger.warn(JSON.stringify(e, undefined, 2));
-                logger.warn(e.stack)
-                Console.printStackTrace(e)
-                throw e
+				logger.error('Error adding Property ' + propData.name);
+				logger.warn(JSON.stringify(e, undefined, 2));
+				logger.warn(e.stack);
+				Console.printStackTrace(e);
+				throw e;
 			}
 		};
 	}
@@ -386,4 +383,3 @@ export default global.ioi.settings;
 // 		ChatLib.chat('BUTTON PRESS');
 // 	},
 // });
-
