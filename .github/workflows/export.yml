@@ -1,0 +1,39 @@
+name: Export and Upload ioi.zip
+
+on:
+  workflow_dispatch:
+
+jobs:
+  export:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+      
+      - name: Run files.js script
+        run: node !files.js
+      
+      - name: Remove existing zip file if it exists
+        run: if exist "ioi.zip" del "ioi.zip"
+        shell: cmd
+      
+      - name: Install 7-Zip
+        run: |
+          choco install 7zip -y
+      
+      - name: Create zip file
+        run: |
+          "C:\Program Files\7-Zip\7z.exe" a -tzip ioi.zip @!files.txt
+        shell: cmd
+      
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: ioi-package
+          path: ioi.zip
+          retention-days: 7
