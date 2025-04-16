@@ -181,6 +181,8 @@ class QuestDisplay extends Feature {
 						.toLowerCase()
 						.replace('coal', 'coal_ore');
 					const event = this.registerEvent('blockBreak', (block) => {
+						const worldName = World.toMC().getRegistryKey().getValue().toString();
+						if (worldName !== 'minecraft:mines' && worldName !== 'minecraft:spawn') return;
 						if (filterBlock !== 'blocks' && !new RegExp(`minecraft:${filterBlock}`).test(block)) return;
 						this.DB.quests[questName].progress++;
 					});
@@ -188,6 +190,8 @@ class QuestDisplay extends Feature {
 				}
 				if (/Harvest [\d,]* Crops/.test(o)) {
 					const event = this.registerEvent('blockBreak', (block) => {
+						const worldName = World.toMC().getRegistryKey().getValue().toString();
+						if (worldName !== 'minecraft:cells') return;
 						if (!/minecraft:(?:wheat|beetroots|carrots|potatoes)/.test(block.type.getRegistryName())) return;
 						const fullyGrown = block
 							.getState()
