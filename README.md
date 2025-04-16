@@ -13,8 +13,7 @@ To use this module, you need to install the ChatTriggers mod for Minecraft 1.21.
 1. Download the unofficial ChatTriggers port for Minecraft 1.21.4 from [github:malte9799/ctjs](https://github.com/malte9799/ctjs/releases).
 2. Place the downloaded `.jar` file into your Minecraft `mods` folder.
 3. Launch Minecraft and join a Singeplayer World or a Server.
-4. Run `/ct files` to ensure the mod is installed correctly
-   A explorer Window will open where you need to place the IoI Module.
+4. Run `/ct files` to ensure the mod is installed correctly. A explorer Window will open where you need to place the IoI Module from Step 2.
 
 ### Step 2: Download IoI Module
 
