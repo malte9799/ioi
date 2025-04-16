@@ -3,7 +3,7 @@ import metadata from '../metadata.js';
 import logger from '../logger.js';
 import huds from '../huds.js';
 import tabcompletion from '../utils/tabcompletion.js';
-// import settings from '../settings.js';
+import settings from '../settings.js';
 
 const File = Java.type('java.io.File');
 
@@ -12,15 +12,12 @@ class FeatureManager {
 		this.enabled = false;
 		this.isDev = logger.isDev;
 
-		this.featureFiles = [];
 		this.features = {};
 		this.events = {};
 		this.dynamicEvents = {};
 		this.lastEventId = 0;
 
-		// this.Settings = settings;
-
-		this.longEventTime = 20;
+		this.longEventTime = 40;
 
 		this.registerEvent('gameUnload', () => {
 			this.unloadMain();
@@ -56,7 +53,7 @@ class FeatureManager {
 			let startLoading = Date.now();
 			this.loadAllFeatures();
 			logger.chat('Loaded!');
-			logger.info('TrappedIoI took ' + ((Date.now() - startLoading) / 1000).toFixed(2) + 's to load');
+			logger.info('IoI took ' + ((Date.now() - startLoading) / 1000).toFixed(2) + 's to load');
 		}).start();
 	}
 	unloadMain() {
@@ -98,12 +95,12 @@ class FeatureManager {
 	}
 
 	loadAllFeatures() {
-		let loadedFeatures = new Map();
-		this.featureFiles = this.getAllFeatureFiles('./config/ChatTriggers/modules/' + metadata.name + '/features');
+		const loadedFeatures = new Map();
+		const featureFiles = this.getAllFeatureFiles('./config/ChatTriggers/modules/' + metadata.name + '/features');
 		new Thread(() => {
 			this.dataLoader = this.loadFeature('dataLoader').class;
 		}).start();
-		this.featureFiles.forEach((feature) => {
+		featureFiles.forEach((feature) => {
 			if (feature == 'dataLoader') return;
 			loadedFeatures.set(feature, false);
 			new Thread(() => {
@@ -119,10 +116,10 @@ class FeatureManager {
 		if (this.features[feature]) return false;
 		try {
 			let loadedFeature = require('../features/' + feature + '.js');
-			if (!force && !loadedFeature.class.isDefaultEnabled) return false;
 			this.features[feature] = loadedFeature;
 			loadedFeature.class.setId(feature);
-			loadedFeature.class._onEnable(this);
+			loadedFeature.class._initSettings(settings);
+			if (force || loadedFeature.class.isDefaultEnabled) this.enableFeature(feature);
 			logger.info('■ Loaded feature ' + feature, 3);
 			return loadedFeature;
 		} catch (e) {
@@ -141,9 +138,20 @@ class FeatureManager {
 	}
 	unloadFeature(feature) {
 		if (!this.features[feature]) return false;
-		this.features[feature].class._onDisable();
+		this.disableFeature(feature);
 		delete this.features[feature];
 		logger.info('□ Unloaded feature ' + feature);
+		return true;
+	}
+
+	enableFeature(feature) {
+		if (!this.features[feature] || this.features[feature].class.enabled) return false;
+		this.features[feature].class._onEnable(this);
+		return true;
+	}
+	disableFeature(feature) {
+		if (!this.features[feature] || !this.features[feature].class.enabled) return false;
+		this.features[feature].class._onDisable(this);
 		return true;
 	}
 	//

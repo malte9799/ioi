@@ -25,6 +25,19 @@ export default class Feature {
 		return this.id;
 	}
 
+	_initSettings(Settings) {
+		if (this.isTogglable && !this.isHidden) {
+			const [category, subcategory] = this.id.includes('/') ? this.id.split('/') : [this.id, ''];
+			Settings.addProperty('SWITCH', {
+				name: `Enabled ${subcategory ? subcategory : category}`,
+				descrption: '',
+				category,
+				subcategory,
+				value: this.isDefaultEnabled,
+			});
+		}
+		this.initSettings(Settings);
+	}
 	_onDisable() {
 		Object.values(this.events).forEach((e) => {
 			this.FeatureManager.unregisterEvent(e);
