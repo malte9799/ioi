@@ -84,6 +84,7 @@ register('command', (...args) => {
 					break;
 				case 'deny':
 					Updater.deleteDownload();
+					FeatureManager.loadMain();
 					break;
 				default:
 					new Thread(() => {
@@ -120,6 +121,10 @@ register('command', (...args) => {
 					});
 					break;
 			}
+			break;
+
+		case 'viewChangelog':
+			log('Comming Soon...');
 			break;
 
 		case 'settings':
@@ -166,15 +171,13 @@ function tryUpdate(delay = 0) {
 			return 1;
 		}
 
-		// TODO: Better Chat Messages!
-		log('Update Found!');
-		new TextComponent({ text: ChatLib.getCenteredText('Click to View on Github'), clickEvent: { action: 'open_url', value: `https://github.com/${metadata.creator}/${metadata.name}/releases/latest` } }).chat();
-		new TextComponent({ text: ChatLib.getCenteredText('Click to Print Changelog'), clickEvent: { action: 'run_command', value: `/${metadata.name} viewChangelog` } }).chat();
-		log(ChatLib.getCenteredText(`§4${metadata.version} -> ${version}`));
+		log('§lThere is an update Avalable!');
+		new TextComponent(logger.chatPrefix, new TextComponent({ text: '§e§u[Github]', clickEvent: { action: 'open_url', value: `https://github.com/${metadata.creator}/${metadata.name}/releases/latest` } }), '  ', new TextComponent({ text: '§6§u[Changelog]', clickEvent: { action: 'run_command', value: `/${metadata.name} viewChangelog` } })).chat();
+		log(`§cv${metadata.version}§r ->§a v${version}`);
 		log('');
-		if (!logger.isDev) log(ChatLib.getCenteredText('§c§lNote: Your CT Modules will be reloaded.'));
-		else log(ChatLib.getCenteredText('§c§lNote: IOI will be reloaded'));
-		new TextComponent(new TextComponent({ text: '§a[UPDATE]', clickEvent: { action: 'run_command', value: `/${metadata.name} update accept` } }), new TextComponent({ text: '§4[CANCLE]', clickEvent: { action: 'run_command', value: `/${metadata.name} update deny` } })).chat();
+		if (!logger.isDev) log('§cNote: Your CT Modules will be reloaded.');
+		else log('§cNote: IOI will be reloaded');
+		new TextComponent(logger.chatPrefix, new TextComponent({ text: '§a§l[UPDATE]', clickEvent: { action: 'run_command', value: `/${metadata.name} update accept` } }), '  ', new TextComponent({ text: '§4§l[CANCLE]', clickEvent: { action: 'run_command', value: `/${metadata.name} update deny` } })).chat();
 
 		return 0;
 	} catch (e) {
