@@ -9,7 +9,9 @@ class NightVision extends Feature {
 	constructor() {
 		super();
 
-		this.isDefaultEnabled = true;
+		this.description = 'Automatically applies a permanent night vision effect.';
+
+		this.isDefaultEnabled = false;
 	}
 
 	initSettings(Settings) {}

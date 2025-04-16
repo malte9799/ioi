@@ -8,6 +8,8 @@ class PlayerHider extends Feature {
 	constructor() {
 		super();
 
+		this.description = 'Hides players near specific NPCs or locations.';
+
 		this.isDefaultEnabled = false;
 
 		this.npcs = new Set();

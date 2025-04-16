@@ -6,6 +6,8 @@ class ProgressBar extends Feature {
 	constructor() {
 		super();
 
+		this.description = 'Enhances the progress bar.';
+
 		this.isDefaultEnabled = true;
 	}
 

@@ -9,7 +9,10 @@ class Base extends Feature {
 	constructor() {
 		super();
 
+		this.description = "Displays a preview of a vault's contents when hovering over it in the Vault Menu.";
+
 		this.isDefaultEnabled = false;
+		this.isHidden = true;
 
 		this.vaultMenu = [];
 		this.vaultItems = {};

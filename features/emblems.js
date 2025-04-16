@@ -7,6 +7,8 @@ class Emblems extends Feature {
 	constructor() {
 		super();
 
+		this.description = 'Tracks active emblem boosters and displays their remaining time using BossBars.';
+
 		this.isDefaultEnabled = true;
 
 		this.boosts = new Map();

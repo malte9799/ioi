@@ -21,6 +21,8 @@ class QuestDisplay extends Feature {
 	constructor() {
 		super();
 
+		this.description = 'Displays active quests and thair perogress in a customizable Scoreboard.';
+
 		this.isDefaultEnabled = true;
 
 		this.DB = new PogObject('ioi', { quests: {} }, 'data/quests.data.json');

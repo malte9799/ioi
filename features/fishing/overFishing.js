@@ -12,7 +12,9 @@ class OverFishing extends Feature {
 	constructor() {
 		super();
 
-		this.isDefaultEnabled = true;
+		this.description = "Highlights the area you're about to overfish";
+
+		this.isDefaultEnabled = false;
 
 		this.bobberPos = undefined;
 		this.timeout = 1000; // in ms

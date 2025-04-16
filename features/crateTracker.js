@@ -10,9 +10,12 @@ class CrateTracker extends Feature {
 	constructor() {
 		super();
 
+		this.description = 'Tracks crate rewards and displays statistics in the crate GUI.';
+
+		this.isDefaultEnabled = true;
+
 		this.DB = new PogObject('ioi', {}, 'data/crates.data.json');
 		this.DB.autosave();
-		this.isDefaultEnabled = true;
 
 		this.lastKey = undefined;
 

@@ -5,6 +5,8 @@ class __________ extends Feature {
 	constructor() {
 		super();
 
+		this.description = '';
+
 		this.isDefaultEnabled = false;
 		this.isHidden = true;
 		this.isTogglable = true;

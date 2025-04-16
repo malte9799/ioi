@@ -3,10 +3,11 @@
 import Feature from 'ioi/class/Feature';
 import logger from 'ioi/logger';
 
-// IDK yet: Titel when you get a chamber?
 class Chambers extends Feature {
 	constructor() {
 		super();
+
+		this.description = 'Displays a title text when you find a chamber';
 
 		this.isDefaultEnabled = true;
 	}

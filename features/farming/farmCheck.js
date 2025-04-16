@@ -17,6 +17,8 @@ class FarmCheck extends Feature {
 	constructor() {
 		super();
 
+		this.description = 'Analyzes any farm and displays stats like missing crops or fully grown percentage.';
+
 		this.isDefaultEnabled = true;
 
 		this.grown = 0;

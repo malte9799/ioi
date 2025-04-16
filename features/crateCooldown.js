@@ -5,6 +5,8 @@ class CrateCooldown extends Feature {
 	constructor() {
 		super();
 
+		this.description = 'Displays a 30-second cooldown on all crates when you find one.';
+
 		this.isDefaultEnabled = true;
 
 		this.lastCrate;

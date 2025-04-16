@@ -8,7 +8,10 @@ class PetsOverlay extends Feature {
 	constructor() {
 		super();
 
-		this.isDefaultEnabled = true;
+		this.description = 'Adds a pet info HUD that displays all equipped pets with their level and a progress bar.';
+
+		this.isDefaultEnabled = false;
+		this.isHidden = true;
 	}
 
 	initSettings(Settings) {}

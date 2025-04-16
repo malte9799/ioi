@@ -9,6 +9,8 @@ class HotKeys extends Feature {
 	constructor() {
 		super();
 
+		this.description = 'Allows you to bind custom commands or messages to hotkeys.';
+
 		this.isDefaultEnabled = true;
 
 		if (!DB.hotKeys) DB.hotKeys = {};

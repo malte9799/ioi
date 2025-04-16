@@ -6,6 +6,8 @@ class DataLoader extends Feature {
 	constructor() {
 		super();
 
+		this.description = '';
+
 		this.isDefaultEnabled = true;
 		this.isHidden = true;
 		this.isTogglable = false;

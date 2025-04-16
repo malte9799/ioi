@@ -8,6 +8,8 @@ class EasyClaim extends Feature {
 	constructor() {
 		super();
 
+		this.description = 'Highlights claimable items in /rewards.';
+
 		this.isDefaultEnabled = true;
 
 		this.claimList = ['Keys', 'GPUs', 'Prestige', 'Contraband', 'Pets', 'Drops', 'Farming Crates', 'Mine Crates', 'Fishing Crates', 'Fishing Rewards', 'Champion'];

@@ -7,6 +7,9 @@ import logger from 'ioi/logger';
 class GreenTerra extends Feature {
 	constructor() {
 		super();
+
+		this.description = 'Displayes the Green Terra cooldown on all Hoes';
+
 		this.isDefaultEnabled = true;
 
 		this.baseCooldown = 240;

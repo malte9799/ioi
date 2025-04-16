@@ -10,6 +10,8 @@ class SpeedBreaker extends Feature {
 	constructor() {
 		super();
 
+		this.description = 'Plays a sound when you get the Haste effect from SpeedBreaker (only lvl 1-2)';
+
 		this.isDefaultEnabled = false;
 	}
 

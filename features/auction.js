@@ -6,6 +6,8 @@ class Auction extends Feature {
 	constructor() {
 		super();
 
+		this.description = 'Displays price per unit after the total price for stacked items.';
+
 		this.isDefaultEnabled = true;
 	}
 

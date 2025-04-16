@@ -6,7 +6,10 @@ class Parkour extends Feature {
 	constructor() {
 		super();
 
+		this.description = 'Tracks parkour competitions and displays leaderboards.';
+
 		this.isDefaultEnabled = false;
+		this.isHidden = true;
 
 		this.parkourStarted = undefined;
 	}

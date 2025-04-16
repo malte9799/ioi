@@ -8,6 +8,9 @@ import logger from 'ioi/logger';
 class SuperBreaker extends Feature {
 	constructor() {
 		super();
+
+		this.description = 'Displays the Super Breaker cooldown on all pickaxes and plays an Alert when SB is ready.';
+
 		this.isDefaultEnabled = true;
 
 		this.baseCooldown = 240;
