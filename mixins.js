@@ -37,30 +37,6 @@ export const BlockItem_place_tail = BlockItemMixin.inject({
 	}),
 });
 
-const LivingEntityMixin = new Mixin('net.minecraft.entity.LivingEntity');
-export const LivingEntity_addStatusEffect = LivingEntityMixin.inject({
-	method: 'addStatusEffect(Lnet/minecraft/entity/effect/StatusEffectInstance;Lnet/minecraft/entity/Entity;)Z',
-	at: new At('HEAD'),
-	locals: [
-		new Local({
-			type: 'Lnet/minecraft/entity/effect/StatusEffectInstance;',
-			index: 1,
-		}),
-		new Local({
-			type: 'Lnet/minecraft/entity/Entity;',
-			index: 2,
-		}),
-	],
-});
-export const LivingEntity_addStatusEffect2 = LivingEntityMixin.inject({
-	method: 'addStatusEffect(Lnet/minecraft/entity/effect/StatusEffectInstance;)Z',
-	at: new At('HEAD'),
-	locals: new Local({
-		type: 'Lnet/minecraft/entity/effect/StatusEffectInstance;',
-		index: 1,
-	}),
-});
-
 // const EntityMixin = new Mixin('net.minecraft.entity.Entity');
 // export const entity_getTeamColorValue = EntityMixin.inject({
 // 	method: 'getTeamColorValue',
@@ -68,16 +44,16 @@ export const LivingEntity_addStatusEffect2 = LivingEntityMixin.inject({
 // 	cancellable: true,
 // });
 
-// const MinecraftClientMixin = new Mixin('net.minecraft.client.MinecraftClient');
-// export const minecraftClient_hasOutline = MinecraftClientMixin.inject({
-// 	method: 'hasOutline',
-// 	at: new At('HEAD'),
-// 	locals: new Local({
-// 		type: 'Lnet/minecraft/entity/Entity;',
-// 		ordinal: 0,
-// 	}),
-// 	cancellable: true,
-// });
+const MinecraftClientMixin = new Mixin('net.minecraft.client.MinecraftClient');
+export const MinecraftClient_hasOutline = MinecraftClientMixin.inject({
+	method: 'hasOutline',
+	at: new At('HEAD'),
+	locals: new Local({
+		type: 'Lnet/minecraft/entity/Entity;',
+		ordinal: 0,
+	}),
+	cancellable: true,
+});
 //
 
 //
