@@ -40,7 +40,7 @@ To use this module, you need to install the ChatTriggers mod for Minecraft 1.21.
 |     | <sub>![1]</sub> **Mining**  |                                                                                         |                    |
 | ✅  | Chamber Notification        | Displays a title text when you find a chamber                                           |         ✓          |
 | ✅  | SuperBreaker                | Displays the Super Breaker cooldown on all pickaxes                                     |         ✓          |
-| ✅  | SpeedBreaker                | Plays a sound when you get the Haste effect from SpeedBreaker (only lvl 1-2)            |         ✗          |
+| ✅  | SpeedBreaker                | Plays a sound when you get the Haste effect from SpeedBreaker (only lvl 1-2)            |         ✓          |
 |     | <sub>![2]</sub> **Fishing** |                                                                                         |                    |
 | 🚧  | OverFishing                 | Highlights the area you're about to overfish                                            |         ✗          |
 |     | <sub>![3]</sub> **Farming** |                                                                                         |                    |
