@@ -3,8 +3,7 @@
 import Feature from 'ioi/class/Feature';
 import logger from 'ioi/logger';
 
-import RenderLib3d from 'ioi/utils/RenderLib3d';
-const RenderSystem = Java.type('com.mojang.blaze3d.systems.RenderSystem');
+import RenderLib3d from '../../utils/RenderLib3d';
 
 const maxAge = {
 	'minecraft:wheat': 7,
@@ -68,47 +67,27 @@ class FarmCheck extends Feature {
 				}
 			}).start();
 		});
-		this.renderT = this.registerEvent('renderWorld', () => {
+		this.renderT = this.registerEvent('postRenderWorld', () => {
 			World.getAllEntitiesOfType(net.minecraft.entity.ItemEntity).forEach((item) => {
 				if (item.toMC().age <= 20) return;
 				const pos = new Vec3f(item.getRenderX(), item.getRenderY(), item.getRenderZ());
-				RenderLib3d.drawBox({ start: pos.translated(-0.125, 0, -0.125), size: new Vec3f(0.25, 0.25, 0.25), lineWidth: 2 });
+				RenderLib3d.drawBox({ start: pos.translated(-0.125, 0, -0.125), size: new Vec3f(0.25, 0.25, 0.25), filled: false });
 			});
-			// Renderer.pushMatrix();
-			// const playerPos = Player.getPos();
-			// Renderer.translate(playerPos.x, playerPos.y, playerPos.z);
 
 			if (this.missingCrops?.length == 0) return;
+			// const h = Math.cos((((java.lang.System.nanoTime() / 100000) % 20000) / 20000) * Math.PI * 2) / 4;
+			const h = 0;
 			const filtered = this.missingCrops
 				.filter((pos) => Math.abs(Player.getY() - pos.y) <= 1)
 				.sort((a, b) => {
 					return a.distanceTo(Player.getPos()) - b.distanceTo(Player.getPos());
 				});
 			filtered.slice(0, 20).forEach((pos, i, arr) => {
-				// if (arr.length >= 50 && pos.distanceTo(Player.getPos()) > 5) return;
-				// RenderLib3d.drawBox({ start: pos, size: new Vec3f(1, 0.2, 1), color: Renderer.getColor(255, 255, 255, 100) });
-
 				pos = new Vec3f(pos.x, pos.y, pos.z);
-				RenderLib3d.drawBox({ start: pos.translated(0.45, 0.5, 0.45), size: new Vec3f(0.1, 0.1, 0.1), color: Renderer.getColor(255, 63, 63, 100), filled: true, depthTest: filtered.length > 20 });
-				RenderLib3d.drawBox({ start: pos.translated(0.45, 0.7, 0.45), size: new Vec3f(0.1, 0.3, 0.1), color: Renderer.getColor(255, 63, 63, 100), filled: true, depthTest: filtered.length > 20 });
-				// const color = Renderer.getColor(255, 63, 63, 150);
-				// Renderer.pushMatrix().enableDepth(); //.disableCull()
-				// Renderer3d.drawLine(Renderer.WHITE, pos.x, pos.y, pos.z, pos.x, pos.y + 1, pos.z, 5);
-				// Renderer.popMatrix();
-				//
-				// Renderer.pushMatrix().translate(pos.x, pos.y, pos.z).enableDepth(); //.disableCull()
-				// RenderSystem.lineWidth(2);
-				// Renderer3d.begin(Renderer.DrawMode.LINES, Renderer.VertexFormat.LINES);
-				// Renderer3d.pos(0, 0, 0).color(color).normal(0, 1, 0).pos(0, 0.5, 0).color(color).normal(0, 1, 0);
-				// Renderer3d.draw();
-				// RenderSystem.lineWidth(1.0);
-				// Renderer.popMatrix();
-
-				// { start = new Vec3i(0, 0, 0), size = new Vec3i(1, 1, 1), end = undefined, color = Renderer.WHITE, depthTest = true, filled = false, lineWidth = 2 }
-				// RenderLib3d.drawBox({ start: pos, depthTest: true, color: Renderer.WHITE, lineWidth: 2 });
+				// RenderLib3d.drawBox({ start: pos.translated(0.425, 0.45, 0.425), size: new Vec3f(0.15, 0.6, 0.15), color: Renderer.WHITE, depth: filtered.length > 20 });
+				RenderLib3d.drawBox({ start: pos.translated(0.45, 0.5 + h, 0.45), size: new Vec3f(0.1, 0.1, 0.1), color: Renderer.getColor(255, 63, 63, 100), depth: filtered.length > 20 });
+				RenderLib3d.drawBox({ start: pos.translated(0.45, 0.7 + h, 0.45), size: new Vec3f(0.1, 0.3, 0.1), color: Renderer.getColor(255, 63, 63, 100), depth: filtered.length > 20 });
 			});
-
-			// Renderer.popMatrix();
 		}).when(() => World.toMC().getRegistryKey().getValue().toString() == 'minecraft:cells');
 
 		this.blockPlaceT = this.registerEvent('blockPlace', (block, item) => {
