@@ -352,6 +352,7 @@ if (!global.ioi.huds) {
 	global.ioi.huds = huds;
 
 	register('gameUnload', () => {
+		if (!global.ioi.huds) return;
 		global.ioi.huds.save();
 		global.ioi.huds = undefined;
 	}).setPriority(Priority.HIGHEST);
