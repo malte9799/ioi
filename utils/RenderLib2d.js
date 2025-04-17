@@ -125,7 +125,7 @@ export default class RenderLib2d {
 			Renderer.pos(sin, cos, 0).color(color);
 		}
 		Renderer.draw();
-		Renderer.popMatrix();
+		Renderer.disableDepth().popMatrix();
 	}
 
 	/**
@@ -187,7 +187,7 @@ export default class RenderLib2d {
 			Renderer.pos(sin1, cos1, 0).color(color);
 		}
 		Renderer.draw();
-		Renderer.popMatrix();
+		Renderer.disableDepth().popMatrix();
 	}
 
 	/**
@@ -205,7 +205,7 @@ export default class RenderLib2d {
 	static drawLine({ x = 0, y = 0, z = 200, x1 = 0, y1 = 0, color = Renderer.WHITE, lineWidth = 1 }) {
 		Renderer.pushMatrix().translate(0, 0, z).enableDepth();
 		Renderer.drawLine(color, x, y, x1, y1, lineWidth);
-		Renderer.popMatrix();
+		Renderer.disableDepth().popMatrix();
 	}
 
 	/**
