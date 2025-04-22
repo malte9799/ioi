@@ -3,8 +3,9 @@
 import Feature from 'ioi/class/Feature';
 import settings from '../../settings.js';
 import huds from 'ioi/huds';
+import Utils from '../../utils/util';
 
-const textHud = huds.createTextHud('yawPitch', 60, 10, 'Yaw: -999.99 Pitch: -999.99');
+const textHud = huds.createTextHud('yawPitch', Renderer.screen.getWidth() / 2, Renderer.screen.getHeight() - 100, 'Yaw: -999.99 Pitch: -999.99');
 
 textHud.onDraw((x, y, str) => {
 	Renderer.pushMatrix();
@@ -38,7 +39,7 @@ class Farming extends Feature {
 			description: 'Choose the type of yaw and pitch display',
 			category: 'Farming',
 			subcategory: 'Yaw & Pitch',
-			options: ['ActionBar', '[WIP] Below Crosshair', 'Above HotBar'],
+			options: ['ActionBar', 'Below Crosshair', 'Hud Display'],
 		});
 		settings.addProperty('PARAGRAPH', {
 			name: 'Yaw & Pitch Text',
@@ -62,7 +63,21 @@ class Farming extends Feature {
 					ChatLib.actionBar(text);
 					break;
 				case 1: // Below Crosshair
+					// ChatLib.actionBar(Math.round((Player.getYaw() + 225) % 90));
+					const x = Utils.mapRange(Math.round((Player.getYaw() + 225) % 90), 0, 90, -20, 20);
 					// ChatLib.chat(`§aYaw: ${yaw}§r §bPitch: ${pitch}§r`);
+					const offset = 20;
+					const hit = Math.abs(x) <= 1;
+
+					Renderer.pushMatrix();
+					Renderer.translate(Renderer.screen.getWidth() / 2, Renderer.screen.getHeight() / 2 + offset);
+					Renderer.drawRect(Renderer.WHITE, -20, -0.5, 40, 1);
+					Renderer.drawRect(Renderer.WHITE, -0.5, -5, 1, 10);
+					Renderer.drawRect(Renderer.WHITE, -20.5, -2.5, 0.5, 5);
+					Renderer.drawRect(Renderer.WHITE, 20, -2.5, 0.5, 5);
+					Renderer.drawRect(hit ? Renderer.GREEN : Renderer.RED, -1 + x, -5, 2, 10);
+
+					Renderer.popMatrix();
 					break;
 				case 2: // Above HotBar
 					if (huds.isOpen()) return;
@@ -75,7 +90,10 @@ class Farming extends Feature {
 					// ChatLib.chat(`§aYaw: ${yaw}§r §bPitch: ${pitch}§r`);
 					break;
 			}
-		}).when(() => settings.getValue('Yaw & Pitch Display'));
+		}).when(
+			() => settings.getValue('Yaw & Pitch Display'),
+			() => Player.getHeldItem()?.getType()?.getRegistryName()?.includes('_hoe')
+		);
 	}
 
 	onDisable() {}
