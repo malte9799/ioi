@@ -64,11 +64,12 @@ export function downloadUpdate(url) {
 }
 
 export function getChangelogDiff(cv) {
-	if (!FileLib.exists(rel('temp/changelog.json'))) return [];
-	const changelog = JSON.parse(FileLib.read(rel('temp/changelog.json'))).data;
+	const temp = FileLib.exists(rel('temp/changelog.json'));
+	const changelog = JSON.parse(FileLib.read(rel(temp ? 'temp/changelog.json' : 'changelog.json'))).data.reverse();
 	const i = changelog.findIndex((v) => v.version === cv);
-	if (i >= 0) return changelog.slice(i + 1);
-	return changelog;
+	if (i < 0) return changelog;
+	if (temp) return changelog.slice(i + 1);
+	else return [changelog[i]];
 }
 
 export function applyUpdate(sev) {
