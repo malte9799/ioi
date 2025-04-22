@@ -355,7 +355,7 @@ if (!global.ioi.huds) {
 		if (!global.ioi.huds) return;
 		global.ioi.huds.save();
 		global.ioi.huds = undefined;
-	}).setPriority(Priority.HIGHEST);
+	}).setPriority(Priority.HIGH);
 }
 
 export default global.ioi.huds;

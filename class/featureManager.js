@@ -21,7 +21,7 @@ class FeatureManager {
 
 		this.registerEvent('gameUnload', () => {
 			this.unloadMain();
-		});
+		}).trigger.setPriority(Priority.HIGHEST);
 		this.registerCommand('ctLoad', () => {
 			new Thread(() => {
 				this.unloadMain();
