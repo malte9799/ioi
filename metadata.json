@@ -2,7 +2,7 @@
 	"name": "ioi",
 	"creator": "malte9799",
 	"author": "9799ms",
-	"version": "0.0.2",
+	"version": "0.0.3",
 	"entry": "index.js",
 	"requires": ["PogData", "Vigilance"],
 	"mixinEntry": "mixins.js"
