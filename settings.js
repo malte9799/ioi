@@ -145,6 +145,8 @@ class SettingsClass {
 			if (!prop) prop = this.propertys[formatName(propName)];
 			if (!prop) {
 				logger.error('Error getting Prop Value for ' + propName);
+                logger.error(Object.entries(this.propertys), undefined, 2)
+                // throw new Error('Error getting Prop Value for ' + propName);
 				return undefined;
 			}
 			return prop;
