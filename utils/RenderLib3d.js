@@ -15,7 +15,7 @@ const VCP = Client.getMinecraft().getBufferBuilders().getEntityVertexConsumers()
 export default class RenderLib3d {
 	static drawBox({ start = new Vec3i(0, 0, 0), size = new Vec3i(1, 1, 1), end = undefined, color = Renderer.WHITE, depth = true, filled = true } = {}) {
 		if (end) size = end.subtract(start);
-		// color = Renderer.fixAlpha(color);
+		color = Renderer.fixAlpha(color);
 
 		Renderer.pushMatrix().translate(start.getX(), start.getY(), start.getZ());
 		// Renderer.pushMatrix().translate(start.getX() - Client.camera.getX(), start.getY() - Client.camera.getY(), start.getZ() - Client.camera.getZ());
