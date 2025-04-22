@@ -2,8 +2,8 @@ const HandledScreenMixin = new Mixin('net.minecraft.client.gui.screen.ingame.Han
 HandledScreenMixin.widenField('x');
 HandledScreenMixin.widenField('y');
 
-const MouseMixin = new Mixin('net.minecraft.client.Mouse');
-MouseMixin.widenMethod('onMouseButton');
+// const MouseMixin = new Mixin('net.minecraft.client.Mouse');
+// MouseMixin.widenMethod('onMouseButton');
 
 const IntPropertyMixin = new Mixin('net.minecraft.state.property.IntProperty');
 IntPropertyMixin.widenField('min');
@@ -44,16 +44,16 @@ export const BlockItem_place_tail = BlockItemMixin.inject({
 // 	cancellable: true,
 // });
 
-const MinecraftClientMixin = new Mixin('net.minecraft.client.MinecraftClient');
-export const MinecraftClient_hasOutline = MinecraftClientMixin.inject({
-	method: 'hasOutline',
-	at: new At('HEAD'),
-	locals: new Local({
-		type: 'Lnet/minecraft/entity/Entity;',
-		ordinal: 0,
-	}),
-	cancellable: true,
-});
+// const MinecraftClientMixin = new Mixin('net.minecraft.client.MinecraftClient');
+// export const MinecraftClient_hasOutline = MinecraftClientMixin.inject({
+// 	method: 'hasOutline',
+// 	at: new At('HEAD'),
+// 	locals: new Local({
+// 		type: 'Lnet/minecraft/entity/Entity;',
+// 		ordinal: 0,
+// 	}),
+// 	cancellable: true,
+// });
 //
 
 //

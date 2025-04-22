@@ -13,7 +13,7 @@ import settings from './settings.js';
 import FeatureManager from './class/FeatureManager.js';
 
 //#region Mixins
-import { ClientPlayerInteractionManager_breakBlock, BlockItem_place_head, BlockItem_place_tail, MinecraftClient_hasOutline } from './mixins.js';
+import { ClientPlayerInteractionManager_breakBlock, BlockItem_place_head, BlockItem_place_tail } from './mixins.js'; // { minecraftClient_hasOutline }
 const onBlockBreakTrigger = createCustomTrigger('blockBreak');
 ClientPlayerInteractionManager_breakBlock.attach((instance, cir, pos) => {
 	if (!World.isLoaded()) return;
