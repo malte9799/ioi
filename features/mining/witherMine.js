@@ -12,7 +12,8 @@ class WitherMine extends Feature {
 
 		this.description = 'Displays the block to mine with the selected tool.';
 
-		this.isDefaultEnabled = true;
+		this.isDefaultEnabled = false;
+		this.isHidden = true;
 	}
 
 	initSettings(Settings) {}
