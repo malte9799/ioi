@@ -124,7 +124,30 @@ register('command', (...args) => {
 			break;
 
 		case 'viewChangelog':
-			log('Comming Soon...');
+			if (args[1] == 'list') {
+			} else
+				try {
+					/** @type {{ version: string, changes: { type: 'feat' | 'fix' | 'misc' | 'del' | 'change', desc: string }[] }[]} */
+					const changelog = Updater.getChangelogDiff(args[1] || metadata.version).reverse();
+					const typeColors = {
+						feat: '&a&l+ feat: &r    ',
+						remove: '&c&l- remove:&r ',
+						change: '&6&l/ change:&r ',
+						fix: '&f&l= fix:  &r     ',
+						misc: '&7&l= misc:  &r   ',
+					};
+					const typeSort = ['feat', 'remove', 'change', 'fix', 'misc'];
+					log('&6&lChangelog');
+					changelog.forEach(({ version, changes }, i) => {
+						// if (i > 0) ChatLib.chat('');
+						ChatLib.chat('&3&nv' + version);
+						changes.sort((a, b) => typeSort.indexOf(a.type) - typeSort.indexOf(b.type)).forEach(({ type, desc }) => ChatLib.chat(typeColors[type] + desc));
+					});
+				} catch (e) {
+					if (logger.isDev) log('&cFailed to get changelog:', e, e.stack);
+					else log('&cFailed to get changelog');
+					console.log(e + '\n' + e.stack);
+				}
 			break;
 
 		case 'settings':
@@ -145,6 +168,7 @@ register('command', (...args) => {
 			editHud: [],
 			update: [],
 			settings: [],
+			viewChangelog: [],
 		})
 	)
 	.setName(metadata.name);
@@ -153,7 +177,7 @@ function tryUpdate(delay = 0) {
 	try {
 		const meta = Updater.loadMeta();
 		if (!meta) {
-			log('No release found!');
+			log('&cNo release found!');
 			return -1;
 		}
 		const version = Updater.getVersion(meta);
@@ -163,8 +187,8 @@ function tryUpdate(delay = 0) {
 		try {
 			Updater.downloadUpdate(url);
 		} catch (e) {
-			if (logger.isDev) log('failed to download update:', e, e.stack);
-			else log('failed to download update');
+			if (logger.isDev) log('&cFailed to download update:', e, e.stack);
+			else log('Failed to download update');
 			console.log(e + '\n' + e.stack);
 			new TextComponent({ text: ChatLib.getCenteredText('&nClick to Manually Update'), clickEvent: { action: 'open_url', value: `https://github.com/${metadata.creator}/${metadata.name}/releases/latest` } }).chat();
 
@@ -181,8 +205,8 @@ function tryUpdate(delay = 0) {
 
 		return 0;
 	} catch (e) {
-		if (logger.isDev) log('failed to fetch update:', e, e.stack);
-		else log('failed to fetch update');
+		if (logger.isDev) log('&cFailed to fetch update:', e, e.stack);
+		else log('&cFailed to fetch update');
 		console.log(e + '\n' + e.stack);
 	}
 	return -1;
