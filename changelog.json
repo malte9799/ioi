@@ -1,4 +1,48 @@
 {
 	"$schema": "./changelog.schema.json",
-	"data": []
+	"data": [
+		{
+			"version": "0.0.3",
+			"changes": [
+				{
+					"type": "feat",
+					"desc": "Added a Yaw and Pitch Display for Farming"
+				},
+				{
+					"type": "fix",
+					"desc": "Fixed fatal conflicts with Essential"
+				},
+				{
+					"type": "change",
+					"desc": "Updated 3d Renderer. Should be more stable now"
+				},
+				{
+					"type": "feat",
+					"desc": "Added this Changelog system"
+				},
+				{
+					"type": "remove",
+					"desc": "Disabled Wither Mine feature. Needs a lot of work"
+				}
+			]
+		},
+		{
+			"version": "0.0.2",
+			"changes": [
+				{
+					"type": "feat",
+					"desc": "Pulic Beta"
+				}
+			]
+		},
+		{
+			"version": "0.0.1",
+			"changes": [
+				{
+					"type": "feat",
+					"desc": "Initial release"
+				}
+			]
+		}
+	]
 }
