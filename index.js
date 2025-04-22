@@ -151,7 +151,9 @@ register('command', (...args) => {
 			break;
 
 		case 'settings':
-			settings.openGUI();
+			if (args[1] == 'reset') {
+				FileLib.write(metadata.name + '/data/config.toml', '');
+			} else settings.openGUI();
 			break;
 	}
 })
@@ -167,7 +169,7 @@ register('command', (...args) => {
 			},
 			editHud: [],
 			update: [],
-			settings: [],
+			settings: ['reset'],
 			viewChangelog: [],
 		})
 	)
