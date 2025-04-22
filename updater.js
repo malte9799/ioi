@@ -1,4 +1,5 @@
 import metadata from './metadata';
+import logger from './logger';
 
 const File = Java.type('java.io.File');
 const FileOutputStream = Java.type('java.io.FileOutputStream');
@@ -8,7 +9,8 @@ const Channels = Java.type('java.nio.channels.Channels');
 
 export function loadMeta() {
 	try {
-		return JSON.parse(FileLib.getUrlContent(`https://api.github.com/repos/${metadata.creator}/${metadata.name}/releases/latest`));
+		if (!logger.isDev) return JSON.parse(FileLib.getUrlContent(`https://api.github.com/repos/${metadata.creator}/${metadata.name}/releases/latest`));
+		return JSON.parse(FileLib.getUrlContent(`https://api.github.com/repos/${metadata.creator}/${metadata.name}/releases`))[0];
 	} catch (/** @type {Java.type("java.io.FileNotFoundException")} */ e) {
 		return null;
 	}
