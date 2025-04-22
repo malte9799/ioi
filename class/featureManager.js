@@ -36,8 +36,12 @@ class FeatureManager {
 		});
 
 		this.registerEvent('step', () => {
-			Object.entries(this.dynamicEvents).forEach(([id, func]) => {
-				if (func()) this.events[id].register();
+			Object.entries(this.dynamicEvents).forEach(([id, funcs]) => {
+				let enabled = true;
+				funcs.forEach((func) => {
+					if (!func()) enabled = false;
+				});
+				if (enabled) this.events[id].register();
 				else this.events[id].unregister();
 			});
 		}).trigger.setDelay(5);
@@ -120,7 +124,7 @@ class FeatureManager {
 			loadedFeature.class.setId(feature);
 			loadedFeature.class._initSettings(settings);
 			loadedFeature.class.FeatureManager = this;
-			if (force || settings.getValue(feature + '_mainToggle')) this.enableFeature(feature);
+			if (force || loadedFeature.class.isTogglable ? settings.getValue(feature + '_mainToggle') : loadedFeature.class.isDefaultEnabled) this.enableFeature(feature);
 			logger.info('■ Loaded feature ' + feature, 3);
 			return loadedFeature;
 		} catch (e) {
@@ -214,9 +218,11 @@ class FeatureManager {
 			isRegistered: () => {
 				return this.events[id].trigger.isRegistered();
 			},
-			when: (func) => {
-				if (!func()) this.events[id].unregister();
-				this.dynamicEvents[id] = func;
+			when: (...funcs) => {
+				funcs.forEach((func) => {
+					if (!func()) this.events[id].unregister();
+				});
+				this.dynamicEvents[id] = funcs;
 				return this.events[id];
 			},
 		};
@@ -225,6 +231,7 @@ class FeatureManager {
 	}
 	unregisterEvent(event) {
 		event.trigger.unregister();
+		if (this.dynamicEvents[event.id]) delete this.dynamicEvents[event.id];
 		delete this.events[event.id];
 	}
 }
