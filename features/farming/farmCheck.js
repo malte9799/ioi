@@ -78,7 +78,7 @@ class FarmCheck extends Feature {
 			if (this.missingCrops?.length == 0) return;
 			// const h = Math.cos((((java.lang.System.nanoTime() / 100000) % 20000) / 20000) * Math.PI * 2) / 4;
 			const h = 0;
-			const color = getColor(255, 63, 63, 100);
+			const color = Renderer.getColor(255, 63, 63, 100);
 			const filtered = this.missingCrops
 				.filter((pos) => Math.abs(Player.getY() - pos.y) <= 1)
 				.sort((a, b) => {
