@@ -4,6 +4,7 @@ import Feature from 'ioi/class/Feature';
 import logger from 'ioi/logger';
 
 import RenderLib3d from '../../utils/RenderLib3d';
+import Utils from '../../utils/util';
 
 const maxAge = {
 	'minecraft:wheat': 7,
@@ -68,15 +69,16 @@ class FarmCheck extends Feature {
 			}).start();
 		});
 		this.renderT = this.registerEvent('postRenderWorld', () => {
-			World.getAllEntitiesOfType(net.minecraft.entity.ItemEntity).forEach((item) => {
-				if (item.toMC().age <= 20) return;
-				const pos = new Vec3f(item.getRenderX(), item.getRenderY(), item.getRenderZ());
-				RenderLib3d.drawBox({ start: pos.translated(-0.125, 0, -0.125), size: new Vec3f(0.25, 0.25, 0.25), filled: false });
-			});
+			// World.getAllEntitiesOfType(net.minecraft.entity.ItemEntity).forEach((item) => {
+			// 	if (item.toMC().age <= 20) return;
+			// 	const pos = new Vec3f(item.getRenderX(), item.getRenderY(), item.getRenderZ());
+			// 	RenderLib3d.drawBox({ start: pos.translated(-0.125, 0, -0.125), size: new Vec3f(0.25, 0.25, 0.25), filled: true, depth: false });
+			// });
 
 			if (this.missingCrops?.length == 0) return;
 			// const h = Math.cos((((java.lang.System.nanoTime() / 100000) % 20000) / 20000) * Math.PI * 2) / 4;
 			const h = 0;
+			const color = getColor(255, 63, 63, 100);
 			const filtered = this.missingCrops
 				.filter((pos) => Math.abs(Player.getY() - pos.y) <= 1)
 				.sort((a, b) => {
@@ -85,15 +87,15 @@ class FarmCheck extends Feature {
 			filtered.slice(0, 20).forEach((pos, i, arr) => {
 				pos = new Vec3f(pos.x, pos.y, pos.z);
 				// RenderLib3d.drawBox({ start: pos.translated(0.425, 0.45, 0.425), size: new Vec3f(0.15, 0.6, 0.15), color: Renderer.WHITE, depth: filtered.length > 20 });
-				RenderLib3d.drawBox({ start: pos.translated(0.45, 0.5 + h, 0.45), size: new Vec3f(0.1, 0.1, 0.1), color: Renderer.getColor(255, 63, 63, 100), depth: filtered.length > 20 });
-				RenderLib3d.drawBox({ start: pos.translated(0.45, 0.7 + h, 0.45), size: new Vec3f(0.1, 0.3, 0.1), color: Renderer.getColor(255, 63, 63, 100), depth: filtered.length > 20 });
+				RenderLib3d.drawBox({ start: pos.translated(0.45, 0.5 + h, 0.45), size: new Vec3f(0.1, 0.1, 0.1), color, depth: filtered.length > 20 });
+				RenderLib3d.drawBox({ start: pos.translated(0.45, 0.7 + h, 0.45), size: new Vec3f(0.1, 0.3, 0.1), color, depth: filtered.length > 20 });
 			});
-		}).when(() => World.toMC().getRegistryKey().getValue().toString() == 'minecraft:cells');
+		}).when(() => World.toMC()?.getRegistryKey()?.getValue()?.toString() == 'minecraft:cells');
 
 		this.blockPlaceT = this.registerEvent('blockPlace', (block, item) => {
 			// delete this.missingCrops[block.getPos()];
 			this.missingCrops = this.missingCrops.filter((pos) => !pos.equals(block.getPos()));
-		}).when(() => World.toMC().getRegistryKey().getValue().toString() == 'minecraft:cells');
+		}).when(() => World.toMC()?.getRegistryKey()?.getValue()?.toString() == 'minecraft:cells');
 	}
 
 	onDisable() {}
