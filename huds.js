@@ -322,7 +322,7 @@ class Hud {
 	/** @private */
 	_drawBackground() {
 		const color = this._hovering ? this._hoverBackground : this._normalBackground;
-
+		this._getTextSize();
 		Renderer.pushMatrix().translate(this.x, this.y).scale(this.scale).enableDepth();
 		Renderer.drawRect(color, -1, -1, this.width + 2, this.height + 2);
 		Renderer.popMatrix();
