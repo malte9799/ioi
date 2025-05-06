@@ -18,4 +18,19 @@ export default class WroldLib {
 		}
 		return blocks;
 	}
+	static getBlockState(block) {
+		const data = {};
+		block
+			?.getState()
+			?.toString()
+			?.split('}')[1]
+			?.split(',')
+			?.forEach((e) => {
+				let [key, value] = e.slice(1, -1).split('=');
+				if (value == parseFloat(value)) value = parseFloat(value);
+				data[key] = value;
+			});
+
+		return data;
+	}
 }
