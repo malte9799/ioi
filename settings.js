@@ -140,6 +140,10 @@ class SettingsClass {
 			console.dir(this[settingname]);
 		};
 
+        this.hasProp = (propName) => {
+            return this.propertys.hasOwnProperty(propName) || this.propertys.hasOwnProperty(formatName(propName));
+        }
+
 		this.getProp = (propName) => {
 			let prop = this.propertys[propName];
 			if (!prop) prop = this.propertys[formatName(propName)];
