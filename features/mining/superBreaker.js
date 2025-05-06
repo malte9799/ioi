@@ -123,6 +123,7 @@ class SuperBreaker extends Feature {
 			if (settings.getValue('Super Breaker Cooldown Type') === 0) setCooldown(0);
 		});
 		this.registerChat('You are too tired to use that ability again. (${sec}s)', (sec) => {
+			if (!Player.getHeldItem()?.getType()?.getRegistryName()?.includes('_pickaxe')) return;
 			this.alert.unregister();
 			this.mode = mode.cooldown;
 			this.cooldown = sec;
