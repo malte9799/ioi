@@ -1,10 +1,8 @@
 /// <reference types="../../CTAutocomplete" />
 /// <reference lib="es2015" />
 import Feature from '../class/Feature';
-import PogObject from 'PogData';
 import huds from '../huds';
 import settings from '../settings';
-import metadata from '../metadata';
 import db from '../db';
 
 const Background = com.chattriggers.ctjs.api.render.Display.Background;
@@ -24,7 +22,7 @@ function toId(name) {
 	return name.replaceAll(' ', '_').toLowerCase().replace('coal', 'coal_ore');
 }
 function inWorld(world) {
-	return () => World.toMC().getRegistryKey().getValue().toString() == world;
+	return () => World.toMC()?.getRegistryKey()?.getValue()?.toString() == world;
 }
 function holding(item) {
 	return () => Player.getHeldItem()?.getType()?.getRegistryName()?.includes(item) ?? false;

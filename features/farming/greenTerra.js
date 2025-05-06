@@ -29,7 +29,8 @@ class GreenTerra extends Feature {
 			icm.set(new Item(new ItemType('wooden_hoe')).toMC(), sec * 20);
 		};
 		this.hasCooldown = () => {
-			const icm = Player.toMC().itemCooldownManager;
+			const icm = Player.toMC()?.itemCooldownManager;
+			if (!icm) return false;
 			try {
 				return false || icm.isCoolingDown(new Item(new ItemType('netherite_hoe')).toMC()) || icm.isCoolingDown(new Item(new ItemType('diamond_hoe')).toMC()) || icm.isCoolingDown(new Item(new ItemType('gold_hoe')).toMC()) || icm.isCoolingDown(new Item(new ItemType('iron_hoe')).toMC()) || icm.isCoolingDown(new Item(new ItemType('stone_hoe')).toMC()) || icm.isCoolingDown(new Item(new ItemType('wooden_hoe')).toMC());
 			} catch (e) {
