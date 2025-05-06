@@ -14,7 +14,7 @@ const VCP = Client.getMinecraft().getBufferBuilders().getEntityVertexConsumers()
 
 export default class RenderLib3d {
 	static drawBox({ start = new Vec3i(0, 0, 0), size = new Vec3i(1, 1, 1), end = undefined, color = Renderer.WHITE, depth = true, filled = true } = {}) {
-		if (end) size = end.subtract(start);
+		if (end) size = end.minus(start);
 		color = Renderer.fixAlpha(color);
 
 		Renderer.pushMatrix().translate(start.getX(), start.getY(), start.getZ());
@@ -88,7 +88,7 @@ export default class RenderLib3d {
 		Renderer.enableCull().disableBlend().depthMask(true).popMatrix();
 	}
 	static _drawBox({ start = new Vec3i(0, 0, 0), size = new Vec3i(1, 1, 1), end = undefined, color = Renderer.WHITE, depthTest = true, filled = false, lineWidth = 2 } = {}) {
-		if (end) size = end.subtract(start);
+		if (end) size = end.minus(start);
 
 		if (filled) {
 			// this._drawBox({ start, size, color, depth: depthTest });
@@ -110,7 +110,7 @@ export default class RenderLib3d {
 		VertexRendering.drawOutline(Renderer.matrixStack.toMC(), vertexConsumer, voxelShape, offset.getX(), offset.getY(), offset.getZ(), 1.0, 1.0, 1.0, 1.0);
 	}
 	static drawLine({ start = new Vec3i(0, 0, 0), vector = new Vec3i(0, 0, 0), end = undefined, color = Renderer.WHITE, lineWidth = 1, depthTest = true }) {
-		if (end) vector = end.subtract(start);
+		if (end) vector = end.minus(start);
 		color = Color.decode(color);
 
 		vector = new Vec3d(vector.getX(), vector.getY(), vector.getZ());
