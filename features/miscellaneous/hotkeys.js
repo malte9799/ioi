@@ -1,4 +1,4 @@
-/// <reference types="../../CTAutocomplete" />
+/// <reference types="../../../CTAutocomplete" />
 /// <reference lib="es2015" />
 import Feature from 'ioi/class/Feature';
 
@@ -9,7 +9,7 @@ class HotKeys extends Feature {
 	constructor() {
 		super();
 
-		this.description = 'Allows you to bind custom commands or messages to hotkeys.';
+		this.description = 'Allows you to bind custom commands or messages to hotkeys.\nUsage: \'/hotkey add /spawn\' then go into your MC Keybind Settings and set the key. (IoI - HetKeys)';
 
 		this.isDefaultEnabled = true;
 

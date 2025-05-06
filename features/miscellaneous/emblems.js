@@ -1,4 +1,4 @@
-/// <reference types="../../CTAutocomplete" />
+/// <reference types="../../../CTAutocomplete" />
 /// <reference lib="es2015" />
 import Feature from 'ioi/class/Feature';
 import TextLib from 'ioi/utils/TextLib';
@@ -57,7 +57,7 @@ class Emblems extends Feature {
 		const timeUntil = new Date(duration - Date.now() + start);
 		const min = timeUntil.getMinutes() ? timeUntil.getMinutes() + 'm ' : '';
 		const sec = timeUntil.getSeconds() + 's';
-		return `${this.getBossBarNameColor(type)}${type} Emblem §7-§r ${min}${sec}`;
+		return `${this.getBossBarNameColor(type)}${type} Boost (Emblems) §7-§r ${min}${sec}`;
 	}
 	getBossBarNameColor(type) {
 		switch (type) {
@@ -69,6 +69,10 @@ class Emblems extends Feature {
 				return TextLib.ColorCode.GOLD;
 			case 'Fishing Frenzy I':
 				return TextLib.ColorCode.AQUA;
+            case 'Replant I':
+                return TextLib.ColorCode.GOLD
+            case 'mcMMO Herbalism I':
+                return TextLib.ColorCode.GOLD
 			default:
 				return TextLib.ColorCode.WHITE;
 		}
@@ -83,6 +87,10 @@ class Emblems extends Feature {
 				return BossBars.Color.RED;
 			case 'Fishing Frenzy I':
 				return BossBars.Color.BLUE;
+            case 'Replant I':
+                return BossBars.Color.YELLOW
+            case 'mcMMO Herbalism I':
+                return BossBars.Color.YELLOW
 			default:
 				return BossBars.Color.WHITE;
 		}

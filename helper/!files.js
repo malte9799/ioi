@@ -1,7 +1,7 @@
 const path = require('path');
 const fs = require('fs');
 const src = __dirname;
-const ignore = ['.vscode', 'ioi.zip', '.gitignore', '.git', 'docs', 'data', 'dev'];
+const ignore = ['.vscode', 'ioi.zip', '.gitignore', '.git', '.github', 'docs', 'data', 'dev', 'helper'];
 
 const files = [];
 const dirs = [];
@@ -17,7 +17,7 @@ let f = (_) => {
 		} else files.push(p);
 	});
 };
-f('.');
+f('../');
 
 fs.writeFileSync('./!files.txt', files.join('\n'));
 fs.writeFileSync('./!dirs.txt', dirs.join('\n'));

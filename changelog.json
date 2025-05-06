@@ -1,5 +1,5 @@
 {
-	"$schema": "./changelog.schema.json",
+	"$schema": "./data/changelog.schema.json",
 	"data": [
 		{
 			"version": "0.0.3",
