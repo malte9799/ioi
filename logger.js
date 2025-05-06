@@ -16,13 +16,20 @@ class Logger {
 	log(msg) {
 		Console.println(this.format(msg), LogType.INFO);
 	}
+	debug(msg) {
+		if (this.loglevel < 4) return;
+		log(msg);
+	}
 	info(msg) {
+		if (this.loglevel < 3) return;
 		Console.println(this.format(msg), LogType.INFO);
 	}
 	warn(msg) {
+		if (this.loglevel < 2) return;
 		Console.println(this.format(msg), LogType.WARN);
 	}
 	error(msg) {
+		if (this.loglevel < 1) return;
 		Console.println(this.format(msg), LogType.ERROR);
 	}
 
