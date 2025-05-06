@@ -75,12 +75,21 @@ export function getChangelogDiff(cv) {
 }
 
 export function applyUpdate(sev) {
+	if (!logger.isDev) deleteOld();
 	copy(new File(rel('temp')), new File(rel('')));
 	deleteDownload();
 }
 
 export function deleteDownload() {
 	rimraf(rel('temp'));
+}
+
+function deleteOld() {
+	const files = new File(rel('')).listFiles();
+	files.forEach((file) => {
+		if (file.getName() == 'data') return;
+		rimraf(file);
+	});
 }
 
 function rimraf(src) {
