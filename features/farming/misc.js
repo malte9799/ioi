@@ -15,6 +15,8 @@ textHud.onDraw((x, y, str) => {
 	Renderer.popMatrix();
 });
 
+const inCell = () => World?.toMC()?.getRegistryKey()?.getValue()?.toString() == 'minecraft:cells';
+const holdingHoe = () => Player.getHeldItem()?.getType()?.getRegistryName()?.includes('_hoe');
 class Farming extends Feature {
 	constructor() {
 		super();
@@ -52,6 +54,7 @@ class Farming extends Feature {
 
 	onEnable() {
 		this.registerEvent('renderOverlay', () => {
+			if (!inCell() || !holdingHoe()) return;
 			const type = settings.getValue('Yaw & Pitch Display type');
 			const yaw = Player.getYaw().toFixed(2);
 			const pitch = Player.getPitch().toFixed(2);
@@ -67,15 +70,15 @@ class Farming extends Feature {
 					const x = Utils.mapRange(Math.round((Player.getYaw() + 225) % 90), 0, 90, -20, 20);
 					// ChatLib.chat(`§aYaw: ${yaw}§r §bPitch: ${pitch}§r`);
 					const offset = 20;
-					const hit = Math.abs(x) <= 1;
+					const color = Math.abs(x) <= 1 ? Renderer.GREEN : Renderer.WHITE;
 
 					Renderer.pushMatrix();
 					Renderer.translate(Renderer.screen.getWidth() / 2, Renderer.screen.getHeight() / 2 + offset);
-					Renderer.drawRect(Renderer.WHITE, -20, -0.5, 40, 1);
-					Renderer.drawRect(Renderer.WHITE, -0.5, -5, 1, 10);
-					Renderer.drawRect(Renderer.WHITE, -20.5, -2.5, 0.5, 5);
-					Renderer.drawRect(Renderer.WHITE, 20, -2.5, 0.5, 5);
-					Renderer.drawRect(hit ? Renderer.GREEN : Renderer.RED, -1 + x, -5, 2, 10);
+					Renderer.drawRect(color, -20, -0.5, 40, 1);
+					Renderer.drawRect(color, -20.5, -2.5, 0.5, 5);
+					Renderer.drawRect(color, 20, -2.5, 0.5, 5);
+					Renderer.drawRect(color, -0.5, -5, 1, 10);
+					Renderer.drawRect(Renderer.RED, -1 + x, -5, 2, 10);
 
 					Renderer.popMatrix();
 					break;
@@ -90,10 +93,7 @@ class Farming extends Feature {
 					// ChatLib.chat(`§aYaw: ${yaw}§r §bPitch: ${pitch}§r`);
 					break;
 			}
-		}).when(
-			() => settings.getValue('Yaw & Pitch Display'),
-			() => Player.getHeldItem()?.getType()?.getRegistryName()?.includes('_hoe')
-		);
+		}).when(() => settings.getValue('Yaw & Pitch Display'), holdingHoe, inCell);
 	}
 
 	onDisable() {}
