@@ -19,10 +19,7 @@ To use this module, you need to install the ChatTriggers mod for Minecraft 1.21.
 
 1. Go to the [IoI releases page](https://github.com/malte9799/ioi/releases).
 2. Download the latest release `.zip` file.
-3. Extract the contents of the `.zip` file into the following directory:
-   ```
-   .minecraft/config/ChatTriggers/modules/ioi
-   ```
+3. Extract (Unzip) the contents of the `.zip` file into the just opened folder (`/config/ChatTriggers/modules/ioi/`)
 4. Run `/ct load` or Restart Minecraft to load the module.
 
 ---
