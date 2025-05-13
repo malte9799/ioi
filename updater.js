@@ -88,6 +88,7 @@ function deleteOld() {
 	const files = new File(rel('')).listFiles();
 	files.forEach((file) => {
 		if (file.getName() == 'data') return;
+		if (file.getName() == 'temp') return;
 		rimraf(file);
 	});
 }
