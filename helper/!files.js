@@ -10,11 +10,10 @@ let f = (_) => {
 		if (ignore.includes(v.name)) return;
 		if (v.name.startsWith('!')) return;
 		let p = path.join(_, v.name);
-		let s = path.join(src, p);
 		if (v.isDirectory()) {
-			dirs.push(p);
+			dirs.push(p.slice(3));
 			f(p);
-		} else files.push(p);
+		} else files.push(p.slice(3));
 	});
 };
 f('../');
