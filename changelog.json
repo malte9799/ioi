@@ -2,6 +2,43 @@
 	"$schema": "./data/changelog.schema.json",
 	"data": [
 		{
+			"version": "0.0.4",
+			"changes": [
+				{
+					"type": "change",
+					"desc": "Completly reworked the QuestDisplay. You can now move/scale it with '/ioi editHud'"
+				},
+				{
+					"type": "remove",
+					"desc": "Night Vision: Got replaced with '/nightvision' by the server."
+				},
+				{
+					"type": "fix",
+					"desc": "Yaw & Pitch Display."
+				},
+				{
+					"type": "fix",
+					"desc": "Super Breaker Cooldown now works properly with Recharge."
+				},
+				{
+					"type": "fix",
+					"desc": "The SB alert no longer plays when the mine is about to reset."
+				},
+				{
+					"type": "feat",
+					"desc": "ChatTabs: When in gang chat or in a private conversation prefills the chat input box with '/gc ' or '/msg {player} '."
+				},
+				{
+					"type": "fix",
+					"desc": "Farming mcMMO and Replant Emerald now show the correct BossBar color."
+				},
+				{
+					"type": "change",
+					"desc": "Added a missing crops render mode setting."
+				}
+			]
+		},
+		{
 			"version": "0.0.3",
 			"changes": [
 				{
