@@ -9,7 +9,7 @@ class HotKeys extends Feature {
 	constructor() {
 		super();
 
-		this.description = 'Allows you to bind custom commands or messages to hotkeys.\nUsage: \'/hotkey add /spawn\' then go into your MC Keybind Settings and set the key. (IoI - HetKeys)';
+		this.description = "Allows you to bind custom commands or messages to hotkeys.\nUsage: '/hotkey add /spawn' then go into your MC Keybind Settings and set the key. (IoI - HetKeys)";
 
 		this.isDefaultEnabled = true;
 
@@ -35,11 +35,18 @@ class HotKeys extends Feature {
 						this.remove(args.slice(1).join(' '));
 						break;
 					case 'list':
-					default:
 						logger.chat('&6HotKeys:');
 						this.keyBinds.forEach((keyBind) => {
 							logger.chat(`${keyBind.getDescription()}: ${action}`);
 						});
+						break;
+					case 'help':
+					default:
+						logger.chat('/hotkey add <text/command> : Adds a new hotkey');
+						logger.chat('   Example: /hotkey add /spawn');
+						logger.chat('   You can set/change the key in your MC Keybind Settings');
+						logger.chat('/hotkey remove <text/command> : Removes a hotkey');
+						logger.chat('/hotkey list : Lists all hotkeys');
 						break;
 				}
 			},
@@ -47,6 +54,7 @@ class HotKeys extends Feature {
 				add: [],
 				remove: () => this.keyBinds.map((keyBind) => keyBind.getDescription()),
 				list: [],
+				help: [],
 			})
 		);
 	}
