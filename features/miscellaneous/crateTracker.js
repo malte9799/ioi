@@ -5,6 +5,13 @@ import PogObject from 'PogData';
 import RenderLib2d from 'ioi/utils/RenderLib2d';
 import RendererUtils, { Align } from 'ioi/utils/RendererUtils';
 
+function inWorld(world) {
+	return () => World.toMC()?.getRegistryKey()?.getValue()?.toString() == world;
+}
+function holding(item) {
+	return () => Player.getHeldItem()?.getType()?.getRegistryName()?.includes(item) ?? false;
+}
+
 const KeyList = new Set(['minecraft:tripwire_hook', 'minecraft:trial_key', 'minecraft:ominous_trial_key']);
 class CrateTracker extends Feature {
 	constructor() {
@@ -38,7 +45,7 @@ class CrateTracker extends Feature {
 			const [crate, key] = ChatLib.removeFormatting(Player.getHeldItem().getName()).split(' ');
 			if (key.toLowerCase() != 'key') return;
 			this.lastKey = crate;
-		});
+		}).when(inWorld('minecraft:spawn'));
 
 		this.registerEvent('guiOpened', () => {
 			Client.scheduleTask(2, () => {

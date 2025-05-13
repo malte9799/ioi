@@ -8,6 +8,13 @@ const Box = Java.type('net.minecraft.util.math.Box');
 const Vec3d = Java.type('net.minecraft.util.math.Vec3d');
 const RenderSystem = Java.type('com.mojang.blaze3d.systems.RenderSystem');
 
+function inWorld(world) {
+	return () => World.toMC()?.getRegistryKey()?.getValue()?.toString() == world;
+}
+function holding(item) {
+	return () => Player.getHeldItem()?.getType()?.getRegistryName()?.includes(item) ?? false;
+}
+
 class OverFishing extends Feature {
 	constructor() {
 		super();
@@ -15,6 +22,8 @@ class OverFishing extends Feature {
 		this.description = "Highlights the area you're about to overfish";
 
 		this.isDefaultEnabled = false;
+		this.isHidden = true;
+		this.isTogglable = false;
 
 		this.bobberPos = undefined;
 		this.timeout = 1000; // in ms
@@ -33,14 +42,13 @@ class OverFishing extends Feature {
 	onEnable() {
 		this.registerEvent('playerInteract', (action, pos, event) => {
 			if (action.toString() !== 'UseItem') return;
-			const item = Player.getHeldItem()?.getType()?.getRegistryName();
-			if (!item || item !== 'minecraft:fishing_rod') return;
+			if (!holding('fishing_rod')()) return;
 			const bobber = World.getAllEntitiesOfType(FishingBobberEntity).find((e) => e.toMC()?.getPlayerOwner()?.getName()?.getString() === Player.getName()) || undefined;
 			if (!bobber) return;
 			const pos = new Vec3d(bobber.getX(), this.waterY, bobber.getZ());
 			// this.bobberPos = new Vec3f(bobber.getX(), this.waterY, bobber.getZ());
 			this.bobberBox = Box.of(pos, this.dist / 2, 1, this.dist / 2);
-		});
+		}).when(inWorld('minecraft:spawn'), holding('fishing_rod'));
 
 		this.registerChat('| FISH | You caught a ${size}cm ${rarity} ${name}!', (size, rarity, name, event) => {
 			// if (!this.bobberPos) return;

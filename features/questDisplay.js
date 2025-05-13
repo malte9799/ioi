@@ -81,6 +81,7 @@ class questDisplay extends Feature {
 							this.quests.find((e) => e.name == name).progress = progress;
 						}
 					});
+					this.quests.sort((a, b) => b.percent - a.percent);
 				} catch (e) {
 					logger.warn(JSON.stringify(e, undefined, 2));
 					if (e.stack) logger.warn(e.stack);
@@ -88,7 +89,10 @@ class questDisplay extends Feature {
 			});
 		});
 		this.registerChat('| QUESTS | You completed ${questName}!', (questName) => {
-			this.quests.find((e) => e.name == questName).delete();
+			const index = this.quests.findIndex((e) => e.name == questName);
+			if (index == -1) return;
+			this.quests[index].delete();
+			this.quests.splice(index, 1);
 		});
 		this.registerChat('| QUESTS | You have satisfied the quest requirement for ranking up to ${*}', () => {
 			this.quests.forEach((e) => e.delete());
@@ -97,14 +101,11 @@ class questDisplay extends Feature {
 		});
 
 		this.registerEvent('renderOverlay', () => {
-			textHud.text =
-				this.displayHeader +
-				'\n' +
-				this.quests
-					.sort((a, b) => b.percent - a.percent)
-					.slice(0, 5)
-					.map((e) => e.toString())
-					.join('\n');
+			textHud.text = this.displayHeader + '\n';
+			textHud.text += this.quests
+				.slice(0, 5)
+				.map((e) => e.toString())
+				.join('\n');
 
 			textHud._getTextSize();
 			Renderer.pushMatrix().translate(textHud.getX(), textHud.getY()).scale(textHud.getScale());
@@ -112,6 +113,9 @@ class questDisplay extends Feature {
 			// Renderer.drawStringWithShadow(textHud.text, 0, 0);
 			Renderer.drawString(textHud.text, 0, 0);
 			Renderer.popMatrix();
+		});
+		this.registerStep(false, 1, () => {
+			this.quests.sort((a, b) => b.percent - a.percent);
 		});
 	}
 }
@@ -164,7 +168,8 @@ class Quest {
 	}
 
 	delete() {
-		this.trigger.unregister();
+		// this.trigger.unregister();
+		this.p.FeatureManager.unregisterEvent(this.trigger);
 		db.quests.splice(
 			db.quests.findIndex((e) => e.name == this.name),
 			1
