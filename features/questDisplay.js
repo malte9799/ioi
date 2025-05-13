@@ -52,7 +52,7 @@ class questDisplay extends Feature {
 	}
 
 	onEnable() {
-		db.quests.forEach((e) => {
+		db.quests?.forEach((e) => {
 			this.quests.push(new Quest(this, e.name, e.objective, e.progress, e.goal));
 		});
 		this.registerEvent('guiOpened', (gui, event) => {
