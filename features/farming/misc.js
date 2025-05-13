@@ -34,7 +34,7 @@ class Farming extends Feature {
 			description: 'Displays your yaw and pitch',
 			category: 'Farming',
 			subcategory: 'Yaw & Pitch',
-			value: true,
+			value: false,
 		});
 		settings.addProperty('SELECTOR', {
 			name: 'Yaw & Pitch Display type',
