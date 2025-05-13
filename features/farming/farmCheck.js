@@ -85,13 +85,13 @@ class FarmCheck extends Feature {
 
 				if (this.missingCrops.length == 0) {
 					logger.chat('Fully Planted');
-					const perc = Math.floor((this.grown / (this.grown + this.growing)) * 100);
-					logger.chat(`${perc}% Grown`);
 				} else {
 					logger.chat(this.missingCrops.length + ' Crops Missing!');
 					this.renderT.register();
 					this.blockPlaceT.register();
 				}
+				const perc = Math.floor((this.grown / (this.grown + this.growing)) * 100);
+				logger.chat(`${perc}% Grown`);
 			}).start();
 		});
 		this.renderT = this.registerEvent('postRenderWorld', () => {
