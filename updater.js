@@ -74,8 +74,8 @@ export function getChangelogDiff(cv) {
 	else return [changelog[i]];
 }
 
-export function applyUpdate(sev) {
-	if (!logger.isDev) deleteOld();
+export function applyUpdate() {
+	if (!FileLib.exists(rel('.gitignore'))) deleteOld();
 	copy(new File(rel('temp')), new File(rel('')));
 	deleteDownload();
 }
