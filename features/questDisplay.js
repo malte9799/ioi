@@ -4,6 +4,7 @@ import Feature from '../class/Feature';
 import huds from '../huds';
 import settings from '../settings';
 import db from '../db';
+import logger from '../logger';
 
 const Background = com.chattriggers.ctjs.api.render.Display.Background;
 const fishRarity = ['common', 'uncommon', 'rare', 'epic', 'legendary', 'unique', 'ethereal', 'mythic', 'boss'];
