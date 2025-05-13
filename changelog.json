@@ -2,6 +2,15 @@
 	"$schema": "./helper/changelog.schema.json",
 	"data": [
 		{
+			"version": "0.0.5",
+			"changes": [
+				{
+					"type": "fix",
+					"desc": "Fixed game Crash when opening Active Quests."
+				}
+			]
+		},
+		{
 			"version": "0.0.4",
 			"changes": [
 				{
