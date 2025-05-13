@@ -17,22 +17,18 @@ class FeatureManager {
 		this.dynamicEvents = {};
 		this.lastEventId = 0;
 
-		this.longEventTime = 40;
+		this.longEventTime = 20;
 
 		this.registerEvent('gameUnload', () => {
 			this.unloadMain();
 		}).trigger.setPriority(Priority.HIGHEST);
 		this.registerCommand('ctLoad', () => {
-			new Thread(() => {
-				this.unloadMain();
-				ChatLib.command('ct load');
-			}).start();
+			this.unloadMain();
+			ChatLib.command('ct load');
 		});
 		this.registerCommand('ctUnload', () => {
-			new Thread(() => {
-				this.unloadMain();
-				ChatLib.command('ct unload');
-			}).start();
+			this.unloadMain();
+			ChatLib.command('ct unload');
 		});
 
 		this.registerEvent('step', () => {
