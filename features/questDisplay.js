@@ -40,6 +40,8 @@ class questDisplay extends Feature {
 
 		this.displayHeader = '§6§l    Active Quests    ';
 		this.display = new Display({ x: 4, y: Renderer.screen.getHeight() / 2, background: Background.FULL });
+
+		if (!db.quests) db.quests = [];
 	}
 
 	initSettings() {
@@ -53,7 +55,7 @@ class questDisplay extends Feature {
 	}
 
 	onEnable() {
-		db.quests?.forEach((e) => {
+		db.quests.forEach((e) => {
 			this.quests.push(new Quest(this, e.name, e.objective, e.progress, e.goal));
 		});
 		this.registerEvent('guiOpened', (gui, event) => {
