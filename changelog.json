@@ -2,6 +2,15 @@
 	"$schema": "./helper/changelog.schema.json",
 	"data": [
 		{
+			"version": "0.0.6",
+			"changes": [
+				{
+					"type": "fix",
+					"desc": "Quest Display now works properly on first install."
+				}
+			]
+		},
+		{
 			"version": "0.0.5",
 			"changes": [
 				{
