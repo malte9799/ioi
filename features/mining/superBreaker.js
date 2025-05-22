@@ -15,7 +15,8 @@ const mode = {
 
 function setCooldown(sec = 0) {
 	sec = parseInt(sec);
-	const icm = Player.toMC().getItemCooldownManager();
+	const icm = Player.toMC()?.getItemCooldownManager();
+	if (!icm) return;
 	icm.set(new ItemType('netherite_pickaxe').asItem().toMC(), sec * 20);
 	icm.set(new ItemType('diamond_pickaxe').asItem().toMC(), sec * 20);
 	icm.set(new ItemType('golden_pickaxe').asItem().toMC(), sec * 20);
@@ -24,7 +25,8 @@ function setCooldown(sec = 0) {
 	icm.set(new ItemType('wooden_pickaxe').asItem().toMC(), sec * 20);
 }
 function hasCooldown() {
-	const icm = Player.toMC().getItemCooldownManager();
+	const icm = Player.toMC()?.getItemCooldownManager();
+	if (!icm) return false;
 	return icm.isCoolingDown(new ItemType('netherite_pickaxe').asItem().toMC());
 }
 
@@ -116,7 +118,7 @@ class SuperBreaker extends Feature {
 			if (settings.getValue('Super Breaker Cooldown Type') === 0) setCooldown(this.cooldown);
 		});
 		this.registerChat('Your Super Breaker ability is refreshed!', (event) => {
-			if (this.mode == mode.inactive) cancel(event);
+			if (this.mode !== mode.cooldown) return cancel(event);
 			this.alert.register();
 			this.mode = mode.inactive;
 			this.cooldown = 0;
@@ -141,7 +143,7 @@ class SuperBreaker extends Feature {
 	}
 
 	onDisable() {
-		if (hasCooldown()) setCooldown(0);
+		// if (hasCooldown()) setCooldown(0);
 	}
 }
 module.exports = {
