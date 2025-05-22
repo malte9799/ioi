@@ -172,7 +172,7 @@ class Quest {
 
 	delete() {
 		// this.trigger.unregister();
-		this.p.FeatureManager.unregisterEvent(this.trigger);
+		if (this.trigger) this.p.FeatureManager.unregisterEvent(this.trigger);
 		db.quests.splice(
 			db.quests.findIndex((e) => e.name == this.name),
 			1
@@ -336,6 +336,7 @@ class Quest {
 			});
 		}
 		if (o == 'Participate in Vote Parties') {
+			// | VOTE | The vote party has ended, because you did not claim an entry you have been given the rewards automatically.
 			return this.p.registerChat('The vote party has ended, thank you for voting and claiming your reward.', () => {
 				this.addProgress();
 			});
