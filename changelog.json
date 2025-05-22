@@ -2,6 +2,23 @@
 	"$schema": "./helper/changelog.schema.json",
 	"data": [
 		{
+			"version": "0.0.7",
+			"changes": [
+				{
+					"type": "fix",
+					"desc": "SuperBreaker Refresh msg appering twice."
+				},
+				{
+					"type": "fix",
+					"desc": "Quest Display not resetting properly."
+				},
+				{
+					"type": "fix",
+					"desc": "Rounding error in Progress Bar."
+				}
+			]
+		},
+		{
 			"version": "0.0.6",
 			"changes": [
 				{
